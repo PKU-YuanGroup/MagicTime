@@ -2,6 +2,9 @@
 <h5 align="center"> If you like our project, please give us a star ⭐ on GitHub for latest update.  </h2>
 
 <h5 align="center">
+
+
+  
 [![arXiv](https://img.shields.io/badge/Arxiv-2401.15947-b31b1b.svg?logo=arXiv)](https://github.com/PKU-YuanGroup/MagicTime) 
 [![License](https://img.shields.io/badge/License-Apache%202.0-yellow)](https://github.com/PKU-YuanGroup/MagicTime/blob/main/LICENSE) 
 </h5>

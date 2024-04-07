@@ -1,7 +1,7 @@
 <h2 align="center"> <a href="https://github.com/PKU-YuanGroup/MagicTime">MagicTime: Time-lapse Video Generation Models 
   
 <a href="https://github.com/PKU-YuanGroup/MagicTime">as Metamorphic Simulators</a></h2>
-<h5 align="center"> If you like our project, please give us a star ⭐ on GitHub for latest update.  </h2>
+<h5 align="center"> If you like our project, please give us a star ⭐ on GitHub for the latest update.  </h2>
 
 <h5 align="center">
 
@@ -20,7 +20,7 @@ This repository is the official implementation of MagicTime, a metamorphic video
 ## 📣 News
 * ⏳⏳⏳ Training a stronger model with the support of [Open-Sora-Plan](https://github.com/PKU-YuanGroup/Open-Sora-Plan) (e.g 65 x 512 × 512)..
 * ⏳⏳⏳ Release MagicTime and ChronoMagic dataset.
-* **[2024.04.08]**  🔥 **All codes & datasets** are coming soon! Stay turned 👀!
+* **[2024.04.08]**  🔥 **All codes & datasets** are coming soon! Stay tuned 👀!
 
 ## 😮 Highlights
 

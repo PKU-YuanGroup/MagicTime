@@ -239,13 +239,13 @@ ChronoMagic with 2265 metamorphic time-lapse videos, each accompanied by a detai
 
 
 ## 👍 Acknowledgement
-* [Animatediff](https://github.com/guoyww/AnimateDiff/tree/main) The codebase we built upon and it is a strong UNet-based text-to-video generation model.
+* [Animatediff](https://github.com/guoyww/AnimateDiff/tree/main) The codebase we built upon and it is a strong U-Net-based text-to-video generation model.
 
 * [Open-Sora-Plan](https://github.com/PKU-YuanGroup/Open-Sora-Plan) The codebase we built upon and it is a simple and scalable DiT-based text-to-video generation repo, to reproduce [Sora](https://openai.com/sora).
 
 ## 🔒 License
 * The majority of this project is released under the Apache 2.0 license as found in the [LICENSE](https://github.com/PKU-YuanGroup/MagicTime/blob/main/LICENSE) file.
-* The service is a research preview intended for non-commercial use only. Please contact us if you find any potential violation.
+* The service is a research preview intended for non-commercial use only. Please contact us if you find any potential violations.
 
 
 

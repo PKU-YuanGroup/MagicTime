@@ -199,7 +199,7 @@ https://github.com/PKU-YuanGroup/MagicTime.git
 Coming soon!
 
 ## 🐳 ChronoMagic Dataset
-ChronoMagic with 2265 metamorphic time-lapse videos, each accompanied by a detailed caption. The dataset is coming soon.
+ChronoMagic with 2265 metamorphic time-lapse videos, each accompanied by a detailed caption. The dataset is coming soon. Some samples can be found on our Project Page.
 
 
 ## 👍 Acknowledgement

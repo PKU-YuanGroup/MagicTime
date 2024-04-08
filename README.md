@@ -21,7 +21,7 @@ This repository is the official implementation of MagicTime, a metamorphic video
 
 ## 📣 News
 * ⏳⏳⏳ Training a stronger model with the support of [Open-Sora-Plan](https://github.com/PKU-YuanGroup/Open-Sora-Plan) (e.g 257 x 512 × 512)..
-* ⏳⏳⏳ Release MagicTime and ChronoMagic dataset.
+* ⏳⏳⏳ Release MagicTime.
 * **[2024.04.08]**  🔥 We released the subset of ChronoMagic dataset used to train MagicTime. The dataset includes 2,265 metamorphic video-text pairs and can be downloaded at [Google Drive](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing).
 * **[2024.04.08]**  🔥 **All codes & datasets** are coming soon! Stay tuned 👀!
 

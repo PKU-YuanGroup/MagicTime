@@ -230,7 +230,12 @@ ChronoMagic with 2265 metamorphic time-lapse videos, each accompanied by a detai
 If you find our paper and code useful in your research, please consider giving a star :star: and citation :pencil:.
 
 ```BibTeX
-
+@article{MagicTime,
+  author    = {Shenghai Yuan, Jinfa Huang, Yujun Shi, Yongqi Xu, Ruijie Zhu, Bin Lin, Xinhua Cheng, Li Yuan, Jiebo Luo},
+  title     = {MagicTime: Time-lapse Video Generation Models as Metamorphic Simulators},
+  journal   = {arxiv},
+  year      = {2024},
+}
 ```
 
 

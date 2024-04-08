@@ -8,6 +8,7 @@
 
   
 [![arXiv](https://img.shields.io/badge/Arxiv-coming.soon-b31b1b.svg?logo=arXiv)](https://github.com/PKU-YuanGroup/MagicTime) 
+[![Home Page](https://img.shields.io/badge/Project-<Website>-blue.svg)](https://pku-yuangroup.github.io/MagicTime/) 
 [![License](https://img.shields.io/badge/License-Apache%202.0-yellow)](https://github.com/PKU-YuanGroup/MagicTime/blob/main/LICENSE) 
 ![GitHub Repo stars](https://img.shields.io/github/stars/PKU-YuanGroup/MagicTime)
 

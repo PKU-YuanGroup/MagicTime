@@ -9,6 +9,7 @@
   
 [![arXiv](https://img.shields.io/badge/Arxiv-coming.soon-b31b1b.svg?logo=arXiv)](https://github.com/PKU-YuanGroup/MagicTime) 
 [![Home Page](https://img.shields.io/badge/Project-<Website>-blue.svg)](https://pku-yuangroup.github.io/MagicTime/) 
+[![Dataset](https://img.shields.io/badge/Dataset-<Google>-green)](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing)
 [![License](https://img.shields.io/badge/License-Apache%202.0-yellow)](https://github.com/PKU-YuanGroup/MagicTime/blob/main/LICENSE) 
 ![GitHub Repo stars](https://img.shields.io/github/stars/PKU-YuanGroup/MagicTime)
 
@@ -21,6 +22,7 @@ This repository is the official implementation of MagicTime, a metamorphic video
 ## 📣 News
 * ⏳⏳⏳ Training a stronger model with the support of [Open-Sora-Plan](https://github.com/PKU-YuanGroup/Open-Sora-Plan) (e.g 257 x 512 × 512)..
 * ⏳⏳⏳ Release MagicTime and ChronoMagic dataset.
+* **[2024.04.08]**  🔥 We released the subset of ChronoMagic dataset used to train MagicTime. The dataset includes 2,265 metamorphic video-text pairs and can be downloaded at [Google Drive](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing).
 * **[2024.04.08]**  🔥 **All codes & datasets** are coming soon! Stay tuned 👀!
 
 ## 😮 Highlights
@@ -199,7 +201,7 @@ https://github.com/PKU-YuanGroup/MagicTime.git
 Coming soon!
 
 ## 🐳 ChronoMagic Dataset
-ChronoMagic with 2265 metamorphic time-lapse videos, each accompanied by a detailed caption. The dataset is coming soon. Some samples can be found on our Project Page.
+ChronoMagic with 3000+ metamorphic time-lapse videos, each accompanied by a detailed caption. We released the subset of ChronoMagic used to train MagicTime and the rest of the data is coming soon. The dataset is can be downloaded at [Google Drive](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing). Some samples can be found on our Project Page.
 
 
 ## 👍 Acknowledgement

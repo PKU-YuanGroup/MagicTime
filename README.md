@@ -187,6 +187,17 @@ The mission of this project is to help reproduce Sora and provide high-quality v
     <td colspan="1"><center>"Sunrise Splendor: Capture the breathtaking moment [...]"</center></td>
     <td colspan="1"><center>"Nightfall Elegance: Embrace the tranquil beauty [...]"</center></td>
   </tr>
+    <td><img src="__assets__/videos/D_0_4.gif" alt="OpenSora"></td>
+    <td><img src="__assets__/videos/D_0_5.gif" alt="OpenSora"></td>
+    <td><img src="__assets__/videos/D_0_6.gif" alt="OpenSora"></td>
+    <td><img src="__assets__/videos/D_0_7.gif" alt="OpenSora"></td>
+  </tr>
+  <tr>
+    <td colspan="1"><center>"The sun descending below the horizon [...]"</center></td>
+    <td colspan="1"><center>"[...] daylight fades into the embrace of the night [...]"</center></td>
+    <td colspan="1"><center>"Time-lapse of the dynamic formations of clouds [...]"</center></td>
+    <td colspan="1"><center>"Capture the dynamic formations of clouds [...]"</center></td>
+  </tr>
 </table>
 
 

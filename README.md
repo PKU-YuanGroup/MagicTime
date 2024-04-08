@@ -212,7 +212,7 @@ https://github.com/PKU-YuanGroup/MagicTime.git
 Coming soon!
 
 ## 🐳 ChronoMagic Dataset
-ChronoMagic with 3000+ metamorphic time-lapse videos, each accompanied by a detailed caption. We released the subset of ChronoMagic used to train MagicTime and the rest of the data is coming soon. The dataset is can be downloaded at [Google Drive](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing). Some samples can be found on our Project Page.
+ChronoMagic with 2265 metamorphic time-lapse videos, each accompanied by a detailed caption. We released the subset of ChronoMagic used to train MagicTime and the ChronoMagic-Landscape dataset is coming soon. The dataset can be downloaded at [Google Drive](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing). Some samples can be found on our Project Page.
 
 
 ## 👍 Acknowledgement

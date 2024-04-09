@@ -247,7 +247,6 @@ If you find our paper and code useful in your research, please consider giving a
 
 
 
-
 ## 🤝 Contributors
 
 <a href="https://github.com/PKU-YuanGroup/MagicTime/graphs/contributors">

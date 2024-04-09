@@ -24,7 +24,7 @@ This repository is the official implementation of MagicTime, a metamorphic video
 ## 📣 News
 * ⏳⏳⏳ Training a stronger model with the support of [Open-Sora-Plan](https://github.com/PKU-YuanGroup/Open-Sora-Plan) (e.g 257 x 512 × 512).
 * ⏳⏳⏳ Release the training code of MagicTime.
-* **[2024.04.09]** The inference code, huggingface space and model weight of MagicTime will be released today (Under preparation).
+* **[2024.04.09]**  🔥 We release the inference code, huggingface space and model weight of MagicTime.
 * **[2024.04.09]**  🔥 We release the arXiv paper for MagicTime, and you can click [here](https://arxiv.org/abs/2404.05014) to see more details.
 * **[2024.04.08]**  🔥 We released the subset of ChronoMagic dataset used to train MagicTime. The dataset includes 2,265 metamorphic video-text pairs and can be downloaded at [Google Drive](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing).
 * **[2024.04.08]**  🔥 **All codes & datasets** are coming soon! Stay tuned 👀!
@@ -211,11 +211,15 @@ Prompts are trimmed for display, see [here](https://github.com/PKU-YuanGroup/Mag
 We recommend the requirements as follows.
 
 ```bash
-https://github.com/PKU-YuanGroup/MagicTime.git
+git clone https://github.com/PKU-YuanGroup/MagicTime.git
+cd MagicTime
+conda env create -f environment.yml
+conda activate magictime
 ```
 
 ## 🗝️ Training & Validating
 Coming soon!
+
 
 ## 🐳 ChronoMagic Dataset
 ChronoMagic with 2265 metamorphic time-lapse videos, each accompanied by a detailed caption. We released the subset of ChronoMagic used to train MagicTime and the ChronoMagic-Landscape dataset is coming soon. The dataset can be downloaded at [Google Drive](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing). Some samples can be found on our Project Page.

@@ -7,7 +7,7 @@
 
 
   
-[![arXiv](https://img.shields.io/badge/Arxiv-coming.soon-b31b1b.svg?logo=arXiv)](https://github.com/PKU-YuanGroup/MagicTime) 
+[![arXiv](https://img.shields.io/badge/Arxiv-2404.05014-b31b1b.svg?logo=arXiv)](https://arxiv.org/abs/2404.05014) 
 [![Home Page](https://img.shields.io/badge/Project-<Website>-blue.svg)](https://pku-yuangroup.github.io/MagicTime/) 
 [![Dataset](https://img.shields.io/badge/Dataset-<Google>-green)](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing)
 [![License](https://img.shields.io/badge/License-Apache%202.0-yellow)](https://github.com/PKU-YuanGroup/MagicTime/blob/main/LICENSE) 
@@ -22,6 +22,7 @@ This repository is the official implementation of MagicTime, a metamorphic video
 ## 📣 News
 * ⏳⏳⏳ Training a stronger model with the support of [Open-Sora-Plan](https://github.com/PKU-YuanGroup/Open-Sora-Plan) (e.g 257 x 512 × 512)..
 * ⏳⏳⏳ The inference code and model weight of MagicTime will be released within a week.
+* **[2024.04.09]**  🔥 We release the arXiv paper for MagicTime, and you can click [here](https://arxiv.org/abs/2404.05014) to see more details.
 * **[2024.04.08]**  🔥 We released the subset of ChronoMagic dataset used to train MagicTime. The dataset includes 2,265 metamorphic video-text pairs and can be downloaded at [Google Drive](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing).
 * **[2024.04.08]**  🔥 **All codes & datasets** are coming soon! Stay tuned 👀!
 
@@ -230,11 +231,13 @@ ChronoMagic with 2265 metamorphic time-lapse videos, each accompanied by a detai
 If you find our paper and code useful in your research, please consider giving a star :star: and citation :pencil:.
 
 ```BibTeX
-@article{MagicTime,
-  author    = {Shenghai Yuan, Jinfa Huang, Yujun Shi, Yongqi Xu, Ruijie Zhu, Bin Lin, Xinhua Cheng, Li Yuan, Jiebo Luo},
-  title     = {MagicTime: Time-lapse Video Generation Models as Metamorphic Simulators},
-  journal   = {arxiv},
-  year      = {2024},
+@misc{yuan2024magictime,
+      title={MagicTime: Time-lapse Video Generation Models as Metamorphic Simulators}, 
+      author={Shenghai Yuan and Jinfa Huang and Yujun Shi and Yongqi Xu and Ruijie Zhu and Bin Lin and Xinhua Cheng and Li Yuan and Jiebo Luo},
+      year={2024},
+      eprint={2404.05014},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
 }
 ```
 

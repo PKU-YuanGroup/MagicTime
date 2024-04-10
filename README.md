@@ -21,6 +21,18 @@
 This repository is the official implementation of MagicTime, a metamorphic video generation pipeline based on the given prompts. The main idea is to enhance the capacity of video generation models to accurately depict the real world through our proposed methods and dataset.
 </div>
 
+
+<br>
+<details open><summary>💡 We also have other video generation projects that may interest you ✨. </summary><p>
+<!--  may -->
+
+
+> [**Open-Sora-Plan**](https://github.com/PKU-YuanGroup/Open-Sora-Plan) <br>
+> PKU-Yuan Lab and Tuzhan AI etc. <br>
+> [![github](https://img.shields.io/badge/-Github-black?logo=github)](https://github.com/PKU-YuanGroup/Open-Sora-Plan)  [![github](https://img.shields.io/github/stars/PKU-YuanGroup/Open-Sora-Plan.svg?style=social)](https://github.com/PKU-YuanGroup/Open-Sora-Plan)  <br>
+</p></details>
+
+ 
 ## 📣 News
 * ⏳⏳⏳ Training a stronger model with the support of [Open-Sora-Plan](https://github.com/PKU-YuanGroup/Open-Sora-Plan) (e.g 257 x 512 × 512).
 * ⏳⏳⏳ Release the training code of MagicTime.

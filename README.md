@@ -245,14 +245,14 @@ conda activate magictime
 ### Download Base Model and Dreambooth
 
 ```bash
-sh down_base_model.sh
-sh down_dreambooth.sh
+sh prepare_weights/down_base_model.sh
+sh prepare_weights/down_dreambooth.sh
 ```
 
 ### Prepare MagicTime Module
 
 ```bash
-sh down_magictime_module.sh
+sh prepare_weights/down_magictime_module.sh
 ```
 
 ## 🗝️ Training & Inference

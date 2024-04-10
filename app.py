@@ -31,13 +31,13 @@ css = """
 """
 
 examples = [
-    # 1-ToonYou
+    # 1-RealisticVision
     [
-        "ToonYou_beta6.safetensors", 
+        "RealisticVisionV60B1_v51VAE.safetensors", 
         "motion_module.ckpt", 
-        "Bean sprouts grow and mature from seeds.",
+        "Cherry blossoms transitioning from tightly closed buds to a peak state of bloom. The progression moves through stages of bud swelling, petal exposure, and gradual opening, culminating in a full and vibrant display of open blossoms.",
         "worst quality, low quality, letterboxed",
-        512, 512, "13204175718326964000"
+        512, 512, "2038801077"
     ],
     # 2-RCNZ
     [
@@ -47,13 +47,13 @@ examples = [
         "worst quality, low quality, letterboxed",
         512, 512, "1268480012"
     ],
-    # 3-RealisticVision
+    # 3-ToonYou
     [
-        "RealisticVisionV60B1_v51VAE.safetensors", 
+        "ToonYou_beta6.safetensors", 
         "motion_module.ckpt", 
-        "Cherry blossoms transitioning from tightly closed buds to a peak state of bloom. The progression moves through stages of bud swelling, petal exposure, and gradual opening, culminating in a full and vibrant display of open blossoms.",
+        "Bean sprouts grow and mature from seeds.",
         "worst quality, low quality, letterboxed",
-        512, 512, "2038801077"
+        512, 512, "1496541313"
     ]
 ]
 

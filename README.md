@@ -1,3 +1,6 @@
+<div align=center>
+<img src="__assets__/magictime_logo.png" width="200px">
+</div>
 <h2 align="center"> <a href="https://arxiv.org/abs/2404.05014">MagicTime: Time-lapse Video Generation Models 
   
 <a href="https://arxiv.org/abs/2404.05014">as Metamorphic Simulators</a></h2>
@@ -23,7 +26,7 @@ This repository is the official implementation of MagicTime, a metamorphic video
 
 
 <br>
-<details open><summary>💡 We also have other video generation projects that may interest you ✨. </summary><p>
+<details open><summary>💡 We also have other video generation project that may interest you ✨. </summary><p>
 <!--  may -->
 
 
@@ -35,11 +38,11 @@ This repository is the official implementation of MagicTime, a metamorphic video
  
 ## 📣 News
 * ⏳⏳⏳ Training a stronger model with the support of [Open-Sora-Plan](https://github.com/PKU-YuanGroup/Open-Sora-Plan) (e.g 257 x 512 × 512).
-* ⏳⏳⏳ Release the training code of MagicTime.
-* **[2024.04.10]**  🔥 We release the inference code, huggingface space and model weight of MagicTime.
-* **[2024.04.09]**  🔥 We release the arXiv paper for MagicTime, and you can click [here](https://arxiv.org/abs/2404.05014) to see more details.
-* **[2024.04.08]**  🔥 We released the subset of ChronoMagic dataset used to train MagicTime. The dataset includes 2,265 metamorphic video-text pairs and can be downloaded at [Google Drive](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing).
-* **[2024.04.08]**  🔥 **All codes & datasets** are coming soon! Stay tuned 👀!
+* ⏳⏳⏳ Release the training code of MagicTime and huggingface space.
+* `[2024.04.10]`  🔥 We release the inference code and model weight of MagicTime.
+* `[2024.04.09]`  🔥 We release the arXiv paper for MagicTime, and you can click [here](https://arxiv.org/abs/2404.05014) to see more details.
+* `[2024.04.08]`  🔥 We released the subset of ChronoMagic dataset used to train MagicTime. The dataset includes 2,265 metamorphic video-text pairs and can be downloaded at [Google Drive](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing).
+* `[2024.04.08]`  🔥 **All codes & datasets** are coming soon! Stay tuned 👀!
 
 ## 😮 Highlights
 
@@ -279,14 +282,12 @@ python inference_magictime.py --config sample_configs/RealisticVision.yaml
 python inference_magictime.py --config sample_configs/ToonYou.yaml
 # For RcnzCartoon
 python inference_magictime.py --config sample_configs/RcnzCartoon.yaml
-
 # or you can directly run the .sh
 sh inference.sh
 ```
 
 ## 🐳 ChronoMagic Dataset
 ChronoMagic with 2265 metamorphic time-lapse videos, each accompanied by a detailed caption. We released the subset of ChronoMagic used to train MagicTime. The dataset can be downloaded at [Google Drive](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing). Some samples can be found on our Project Page.
-
 
 ## 👍 Acknowledgement
 * [Animatediff](https://github.com/guoyww/AnimateDiff/tree/main) The codebase we built upon and it is a strong U-Net-based text-to-video generation model.
@@ -296,8 +297,6 @@ ChronoMagic with 2265 metamorphic time-lapse videos, each accompanied by a detai
 ## 🔒 License
 * The majority of this project is released under the Apache 2.0 license as found in the [LICENSE](https://github.com/PKU-YuanGroup/MagicTime/blob/main/LICENSE) file.
 * The service is a research preview intended for non-commercial use only. Please contact us if you find any potential violations.
-
-
 
 ## ✏️ Citation
 If you find our paper and code useful in your research, please consider giving a star :star: and citation :pencil:.
@@ -313,10 +312,9 @@ If you find our paper and code useful in your research, please consider giving a
 }
 ```
 
-
-
 ## 🤝 Contributors
-
 <a href="https://github.com/PKU-YuanGroup/MagicTime/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=PKU-YuanGroup/MagicTime" />
+  <img src="https://contrib.rocks/image?repo=PKU-YuanGroup/MagicTime&anon=true" />
+  
 </a>
+

@@ -91,16 +91,10 @@ class MagicTimeController:
         self.unet                  = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", unet_additional_kwargs=OmegaConf.to_container(self.inference_config.unet_additional_kwargs)).cuda()
         
         self.text_model = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14")
-
-        self.update_dreambooth(self.dreambooth_list[0])
+        
         self.update_motion_module(self.motion_module_list[0])
-
-        from swift import Swift
-        magic_adapter_s_state_dict = torch.load(magic_adapter_s_path, map_location="cpu")
-        self.unet = load_diffusers_lora_unet(self.unet, magic_adapter_s_state_dict, alpha=1.0)
-        self.unet = Swift.from_pretrained(self.unet, magic_adapter_t_path)
-        self.text_encoder = Swift.from_pretrained(self.text_encoder, magic_text_encoder_path)
-
+        self.update_dreambooth(self.dreambooth_list[0])
+        
         
     def refresh_motion_module(self):
         motion_module_list = glob(os.path.join(self.motion_module_dir, "*.ckpt"))
@@ -126,6 +120,13 @@ class MagicTimeController:
         
         text_model = copy.deepcopy(self.text_model)
         self.text_encoder = convert_ldm_clip_text_model(text_model, dreambooth_state_dict)
+
+        from swift import Swift
+        magic_adapter_s_state_dict = torch.load(magic_adapter_s_path, map_location="cpu")
+        self.unet = load_diffusers_lora_unet(self.unet, magic_adapter_s_state_dict, alpha=1.0)
+        self.unet = Swift.from_pretrained(self.unet, magic_adapter_t_path)
+        self.text_encoder = Swift.from_pretrained(self.text_encoder, magic_text_encoder_path)
+
         return gr.Dropdown()
 
     def update_motion_module(self, motion_module_dropdown):
@@ -147,8 +148,8 @@ class MagicTimeController:
         height_slider,
         seed_textbox,
     ):
-        if self.selected_dreambooth != dreambooth_dropdown: self.update_dreambooth(dreambooth_dropdown)
         if self.selected_motion_module != motion_module_dropdown: self.update_motion_module(motion_module_dropdown)
+        if self.selected_dreambooth != dreambooth_dropdown: self.update_dreambooth(dreambooth_dropdown)
         
         if is_xformers_available(): self.unet.enable_xformers_memory_efficient_attention()
 

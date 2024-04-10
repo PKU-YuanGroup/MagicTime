@@ -1,7 +1,7 @@
-torch==1.13.1
-torchvision==0.14.1
-torchaudio==0.13.1
-xformers==0.0.16
+torch==2.2.2
+torchvision==0.17.2
+torchaudio==2.2.2
+xformers==0.0.25.post1
 imageio==2.27.0
 gdown
 einops

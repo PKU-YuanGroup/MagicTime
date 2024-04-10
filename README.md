@@ -1,6 +1,6 @@
-<h2 align="center"> <a href="https://github.com/PKU-YuanGroup/MagicTime">MagicTime: Time-lapse Video Generation Models 
+<h2 align="center"> <a href="https://arxiv.org/abs/2404.05014">MagicTime: Time-lapse Video Generation Models 
   
-<a href="https://github.com/PKU-YuanGroup/MagicTime">as Metamorphic Simulators</a></h2>
+<a href="https://arxiv.org/abs/2404.05014">as Metamorphic Simulators</a></h2>
 <h5 align="center"> If you like our project, please give us a star ⭐ on GitHub for the latest update.  </h2>
 
 <h5 align="center">
@@ -217,9 +217,23 @@ Highly recommend trying out our web demo by the following command, which incorpo
 python app.py
 ```
 
+### CLI Inference
+
+```bash
+# For Realistic
+python inference_magictime.py --config sample_configs/RealisticVision.yaml --human
+
+# or you can directly run the .sh
+sh inference_cli.sh
+```
+
+warning: It is worth noting that even if we use the same seed and prompt but we change a machine, the results will be different.
+
 ## ⚙️ Requirements and Installation
 
 We recommend the requirements as follows.
+
+### Environment
 
 ```bash
 git clone https://github.com/PKU-YuanGroup/MagicTime.git
@@ -228,21 +242,35 @@ conda env create -f environment.yml
 conda activate magictime
 ```
 
+### Download Base Model and Dreambooth
+
+```bash
+sh down_base_model.sh
+sh down_dreambooth.sh
+```
+
+### Prepare MagicTime Module
+
+```bash
+sh down_magictime_module.sh
+```
+
 ## 🗝️ Training & Inference
 
 The training code is coming soon! For inference, some example are shown below:
 
-```
-# For [Realistic](https://civitai.com/models/4201/realistic-vision-v20)
+```bash
+# For Realistic
 python inference_magictime.py --config sample_configs/RealisticVision.yaml
-# For [ToonYou](https://civitai.com/models/30240/toonyou)
+# For ToonYou
 python inference_magictime.py --config sample_configs/ToonYou.yaml
-# For [RcnzCartoon](https://civitai.com/models/66347/rcnz-cartoon-3d)
+# For RcnzCartoon
 python inference_magictime.py --config sample_configs/RcnzCartoon.yaml
 
 # or you can directly run the .sh
 sh inference.sh
 ```
+
 ## 🐳 ChronoMagic Dataset
 ChronoMagic with 2265 metamorphic time-lapse videos, each accompanied by a detailed caption. We released the subset of ChronoMagic used to train MagicTime. The dataset can be downloaded at [Google Drive](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing). Some samples can be found on our Project Page.
 

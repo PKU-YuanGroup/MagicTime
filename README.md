@@ -211,7 +211,7 @@ Prompts are trimmed for display, see [here](https://github.com/PKU-YuanGroup/Mag
 
 ### Gradio Web UI
 
-Highly recommend trying out our web demo by the following command, which incorporates all features currently supported by MagicTime. We also provide [online demo](https://github.com/PKU-YuanGroup/MagicTime) in Huggingface Spaces.
+Highly recommend trying out our web demo by the following command, which incorporates all features currently supported by MagicTime. We also provide [online demo](https://github.com/PKU-YuanGroup/MagicTime) in Huggingface Spaces. (There is a problem with weight loading, we are working on fixing it)
 
 ```bash
 python app.py

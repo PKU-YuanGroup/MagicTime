@@ -6,7 +6,7 @@
 <h5 align="center">
 
 
-[![hf_space](https://img.shields.io/badge/🤗-Open%20In%20Spaces-blue.svg)](https://pku-yuangroup.github.io/MagicTime/)  
+[![hf_space](https://img.shields.io/badge/🤗-Open%20In%20Spaces-blue.svg)](https://huggingface.co/spaces/BestWishYsh/MagicTime?logs=build)  
 [![arXiv](https://img.shields.io/badge/Arxiv-2404.05014-b31b1b.svg?logo=arXiv)](https://arxiv.org/abs/2404.05014) 
 [![Home Page](https://img.shields.io/badge/Project-<Website>-blue.svg)](https://pku-yuangroup.github.io/MagicTime/) 
 [![Dataset](https://img.shields.io/badge/Dataset-<Google>-green)](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing)
@@ -211,7 +211,7 @@ Prompts are trimmed for display, see [here](https://github.com/PKU-YuanGroup/Mag
 
 ### Gradio Web UI
 
-Highly recommend trying out our web demo by the following command, which incorporates all features currently supported by MagicTime. We also provide [online demo](https://github.com/PKU-YuanGroup/MagicTime) in Huggingface Spaces. (There is a problem with weight loading, we are working on fixing it)
+Highly recommend trying out our web demo by the following command, which incorporates all features currently supported by MagicTime. We also provide [online demo](https://huggingface.co/spaces/BestWishYsh/MagicTime?logs=build) in Huggingface Spaces. (There is a problem with weight loading, we are working on fixing it)
 
 ```bash
 python app.py

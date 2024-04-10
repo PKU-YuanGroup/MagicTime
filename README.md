@@ -238,8 +238,9 @@ We recommend the requirements as follows.
 ```bash
 git clone https://github.com/PKU-YuanGroup/MagicTime.git
 cd MagicTime
-conda env create -f environment.yml
+conda create -n magictime python=3.10.13
 conda activate magictime
+pip install -r requirement.txt
 ```
 
 ### Download Base Model and Dreambooth

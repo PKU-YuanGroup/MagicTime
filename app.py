@@ -14,6 +14,7 @@ from transformers import CLIPTextModel, CLIPTokenizer
 from utils.unet import UNet3DConditionModel
 from utils.pipeline_magictime import MagicTimePipeline
 from utils.util import save_videos_grid, convert_ldm_unet_checkpoint, convert_ldm_clip_checkpoint, convert_ldm_vae_checkpoint, load_diffusers_lora_unet, convert_ldm_clip_text_model
+# import spaces
 
 pretrained_model_path   = "./ckpts/Base_Model/stable-diffusion-v1-5"
 inference_config_path   = "./sample_configs/RealisticVision.yaml"
@@ -37,7 +38,7 @@ examples = [
         "motion_module.ckpt", 
         "Cherry blossoms transitioning from tightly closed buds to a peak state of bloom. The progression moves through stages of bud swelling, petal exposure, and gradual opening, culminating in a full and vibrant display of open blossoms.",
         "worst quality, low quality, letterboxed",
-        512, 512, "2038801077"
+        512, 512, "1534851746"
     ],
     # 2-RCNZ
     [
@@ -45,7 +46,7 @@ examples = [
         "motion_module.ckpt", 
         "Time-lapse of a simple modern house's construction in a Minecraft virtual environment: beginning with an avatar laying a white foundation, progressing through wall erection and interior furnishing, to adding roof and exterior details, and completed with landscaping and a tall chimney.",
         "worst quality, low quality, letterboxed",
-        512, 512, "1268480012"
+        512, 512, "3480796026"
     ],
     # 3-ToonYou
     [
@@ -61,7 +62,7 @@ examples = [
 print(f"### Cleaning cached examples ...")
 os.system(f"rm -rf gradio_cached_examples/")
 
-
+# @spaces.GPU(duration=300)
 class MagicTimeController:
     def __init__(self):
         
@@ -89,9 +90,14 @@ class MagicTimeController:
         self.text_encoder          = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder").cuda()
         self.vae                   = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae").cuda()
         self.unet                  = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", unet_additional_kwargs=OmegaConf.to_container(self.inference_config.unet_additional_kwargs)).cuda()
-        
-        self.text_model = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14")
-        
+        self.text_model            = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14")
+
+        # self.tokenizer    = tokenizer
+        # self.text_encoder = text_encoder
+        # self.vae          = vae
+        # self.unet         = unet
+        # self.text_model   = text_model
+
         self.update_motion_module(self.motion_module_list[0])
         self.update_dreambooth(self.dreambooth_list[0])
         
@@ -191,18 +197,28 @@ class MagicTimeController:
             "dreambooth": dreambooth_dropdown,
         }
         return gr.Video(value=save_sample_path), gr.Json(value=json_config)
-        
-controller = MagicTimeController()
 
+# inference_config = OmegaConf.load(inference_config_path)[1]
+# tokenizer        =  CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer")
+# text_encoder     =  CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder").cuda()
+# vae              =  AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae").cuda()
+# unet             =  UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", unet_additional_kwargs=OmegaConf.to_container(inference_config.unet_additional_kwargs)).cuda()
+# text_model       =  CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14")
+# controller       = MagicTimeController(tokenizer=tokenizer, text_encoder=text_encoder, vae=vae, unet=unet, text_model=text_model)
+controller       = MagicTimeController()
 
 def ui():
     with gr.Blocks(css=css) as demo:
         gr.Markdown(
             """
+            <div style='display: flex; align-items: center; justify-content: center; text-align: center;'>
+                <img src='https://www.pnglog.com/48rWnj.png' style='width: 300px; height: auto; margin-right: 10px;' />
+            </div>
+            
             <h2 align="center"> <a href="https://github.com/PKU-YuanGroup/MagicTime">MagicTime: Time-lapse Video Generation Models as Metamorphic Simulators</a></h2>
-            <h5 align="center"> If you like our project, please give us a star ⭐ on GitHub for the latest update.  </h2>
+            <h5 style="text-align:left;">If you like our project, please give us a star ⭐ on GitHub for the latest update.</h5>
 
-            [GitHub](https://img.shields.io/github/stars/PKU-YuanGroup/MagicTime) | [arXiv](https://arxiv.org/abs/2404.05014) | [Home Page](https://pku-yuangroup.github.io/MagicTime/) | [Dataset](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing)
+            [GitHub](https://github.com/PKU-YuanGroup/MagicTime) | [arXiv](https://arxiv.org/abs/2404.05014) | [Home Page](https://pku-yuangroup.github.io/MagicTime/) | [Dataset](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing)
             """
         )
         with gr.Row():
@@ -221,7 +237,7 @@ def ui():
                         width_slider  = gr.Slider(  label="Width",  value=512, minimum=256, maximum=1024, step=64 )
                         height_slider = gr.Slider(  label="Height", value=512, minimum=256, maximum=1024, step=64 )
                     with gr.Row():
-                        seed_textbox = gr.Textbox( label="Seed",  value=-1)
+                        seed_textbox = gr.Textbox( label="Seed (-1 means random)",  value=-1)
                         seed_button  = gr.Button(value="\U0001F3B2", elem_classes="toolbutton")
                         seed_button.click(fn=lambda: gr.Textbox.update(value=random.randint(1, 1e16)), inputs=[], outputs=[seed_textbox])
 
@@ -235,7 +251,12 @@ def ui():
             outputs = [result_video, json_config]
             
             generate_button.click( fn=controller.magictime, inputs=inputs, outputs=outputs )
-                
+        
+        gr.Markdown(
+            """
+            <h5 style="text-align:left;">Warning: It is worth noting that even if we use the same seed and prompt but we change a machine, the results will be different. If you find a better seed and prompt, please tell me in a GitHub issue.</h5>
+            """
+        )        
         gr.Examples( fn=controller.magictime, examples=examples, inputs=inputs, outputs=outputs, cache_examples=True )
         
     return demo

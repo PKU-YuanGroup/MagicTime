@@ -91,7 +91,8 @@ class MagicTimeController:
         self.vae                   = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae").cuda()
         self.unet                  = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", unet_additional_kwargs=OmegaConf.to_container(self.inference_config.unet_additional_kwargs)).cuda()
         self.text_model            = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14")
-
+        self.unet_model            = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", unet_additional_kwargs=OmegaConf.to_container(self.inference_config.unet_additional_kwargs))
+    
         # self.tokenizer    = tokenizer
         # self.text_encoder = text_encoder
         # self.vae          = vae
@@ -99,6 +100,7 @@ class MagicTimeController:
         # self.text_model   = text_model
 
         self.update_motion_module(self.motion_module_list[0])
+        self.update_motion_module_2(self.motion_module_list[0])
         self.update_dreambooth(self.dreambooth_list[0])
         
         
@@ -121,9 +123,10 @@ class MagicTimeController:
         converted_vae_checkpoint = convert_ldm_vae_checkpoint(dreambooth_state_dict, self.vae.config)
         self.vae.load_state_dict(converted_vae_checkpoint)
 
-        converted_unet_checkpoint = convert_ldm_unet_checkpoint(dreambooth_state_dict, self.unet.config)
+        converted_unet_checkpoint = convert_ldm_unet_checkpoint(dreambooth_state_dict, self.unet_model.config)
+        self.unet = copy.deepcopy(self.unet_model)
         self.unet.load_state_dict(converted_unet_checkpoint, strict=False)
-        
+
         text_model = copy.deepcopy(self.text_model)
         self.text_encoder = convert_ldm_clip_text_model(text_model, dreambooth_state_dict)
 
@@ -143,6 +146,13 @@ class MagicTimeController:
         assert len(unexpected) == 0
         return gr.Dropdown()
     
+    def update_motion_module_2(self, motion_module_dropdown):
+        self.selected_motion_module = motion_module_dropdown
+        motion_module_dropdown = os.path.join(self.motion_module_dir, motion_module_dropdown)
+        motion_module_state_dict = torch.load(motion_module_dropdown, map_location="cpu")
+        _, unexpected = self.unet_model.load_state_dict(motion_module_state_dict, strict=False)
+        assert len(unexpected) == 0
+        return gr.Dropdown()
     
     def magictime(
         self,
@@ -155,6 +165,7 @@ class MagicTimeController:
         seed_textbox,
     ):
         if self.selected_motion_module != motion_module_dropdown: self.update_motion_module(motion_module_dropdown)
+        if self.selected_motion_module != motion_module_dropdown: self.update_motion_module_2(motion_module_dropdown)
         if self.selected_dreambooth != dreambooth_dropdown: self.update_dreambooth(dreambooth_dropdown)
         
         if is_xformers_available(): self.unet.enable_xformers_memory_efficient_attention()
@@ -239,7 +250,7 @@ def ui():
                     with gr.Row():
                         seed_textbox = gr.Textbox( label="Seed (-1 means random)",  value=-1)
                         seed_button  = gr.Button(value="\U0001F3B2", elem_classes="toolbutton")
-                        seed_button.click(fn=lambda: gr.Textbox.update(value=random.randint(1, 1e16)), inputs=[], outputs=[seed_textbox])
+                        seed_button.click(fn=lambda: gr.Textbox(value=random.randint(1, 1e16)), inputs=[], outputs=[seed_textbox])
 
                 generate_button = gr.Button( value="Generate", variant='primary' )
 

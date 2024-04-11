@@ -62,7 +62,8 @@ examples = [
 print(f"### Cleaning cached examples ...")
 os.system(f"rm -rf gradio_cached_examples/")
 
-# @spaces.GPU(duration=300)
+device = torch.device('cuda:0')
+
 class MagicTimeController:
     def __init__(self):
         
@@ -87,9 +88,9 @@ class MagicTimeController:
         self.inference_config      = OmegaConf.load(inference_config_path)[1]
 
         self.tokenizer             = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer")
-        self.text_encoder          = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder").cuda()
-        self.vae                   = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae").cuda()
-        self.unet                  = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", unet_additional_kwargs=OmegaConf.to_container(self.inference_config.unet_additional_kwargs)).cuda()
+        self.text_encoder          = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder").to(device)
+        self.vae                   = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae").to(device)
+        self.unet                  = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", unet_additional_kwargs=OmegaConf.to_container(self.inference_config.unet_additional_kwargs)).to(device)
         self.text_model            = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14")
         self.unet_model            = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", unet_additional_kwargs=OmegaConf.to_container(self.inference_config.unet_additional_kwargs))
     
@@ -123,10 +124,16 @@ class MagicTimeController:
         converted_vae_checkpoint = convert_ldm_vae_checkpoint(dreambooth_state_dict, self.vae.config)
         self.vae.load_state_dict(converted_vae_checkpoint)
 
+        if self.unet is not None:
+            del self.unet  # 删除旧模型的引用
+            torch.cuda.empty_cache()
         converted_unet_checkpoint = convert_ldm_unet_checkpoint(dreambooth_state_dict, self.unet_model.config)
         self.unet = copy.deepcopy(self.unet_model)
         self.unet.load_state_dict(converted_unet_checkpoint, strict=False)
 
+        if self.text_encoder is not None:
+            del self.text_encoder
+            torch.cuda.empty_cache()
         text_model = copy.deepcopy(self.text_model)
         self.text_encoder = convert_ldm_clip_text_model(text_model, dreambooth_state_dict)
 
@@ -153,7 +160,8 @@ class MagicTimeController:
         _, unexpected = self.unet_model.load_state_dict(motion_module_state_dict, strict=False)
         assert len(unexpected) == 0
         return gr.Dropdown()
-    
+
+    # @spaces.GPU(duration=300)
     def magictime(
         self,
         dreambooth_dropdown,
@@ -173,7 +181,7 @@ class MagicTimeController:
         pipeline = MagicTimePipeline(
             vae=self.vae, text_encoder=self.text_encoder, tokenizer=self.tokenizer, unet=self.unet,
             scheduler=DDIMScheduler(**OmegaConf.to_container(self.inference_config.noise_scheduler_kwargs))
-        ).to("cuda")
+        ).to(device)
         
         if int(seed_textbox) > 0: seed = int(seed_textbox)
         else: seed = random.randint(1, 1e16)
@@ -182,7 +190,7 @@ class MagicTimeController:
         assert seed == torch.initial_seed()
         print(f"### seed: {seed}")
         
-        generator = torch.Generator(device="cuda")
+        generator = torch.Generator(device=device)
         generator.manual_seed(seed)
         
         sample = pipeline(
@@ -228,7 +236,7 @@ def ui():
             
             <h2 align="center"> <a href="https://github.com/PKU-YuanGroup/MagicTime">MagicTime: Time-lapse Video Generation Models as Metamorphic Simulators</a></h2>
             <h5 style="text-align:left;">If you like our project, please give us a star ⭐ on GitHub for the latest update.</h5>
-
+            
             [GitHub](https://github.com/PKU-YuanGroup/MagicTime) | [arXiv](https://arxiv.org/abs/2404.05014) | [Home Page](https://pku-yuangroup.github.io/MagicTime/) | [Dataset](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing)
             """
         )

@@ -15,9 +15,9 @@
 [![Dataset](https://img.shields.io/badge/Dataset-<Google>-green)](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing)
 [![zhihu](https://img.shields.io/badge/-Twitter@AK%20-black?logo=twitter&logoColor=1D9BF0)](https://twitter.com/_akhaliq/status/1777538468043792473)
 [![zhihu](https://img.shields.io/badge/-Twitter@Jinfa%20Huang%20-black?logo=twitter&logoColor=1D9BF0)](https://twitter.com/vhjf36495872/status/1777525817087553827?s=61&t=r2HzCsU2AnJKbR8yKSprKw)
-[![License](https://img.shields.io/badge/License-Apache%202.0-yellow)](https://github.com/PKU-YuanGroup/MagicTime/blob/main/LICENSE)
-![GitHub Repo stars](https://img.shields.io/github/stars/PKU-YuanGroup/MagicTime)
 [![DOI](https://zenodo.org/badge/783303222.svg)](https://zenodo.org/doi/10.5281/zenodo.10960665)
+[![License](https://img.shields.io/badge/License-Apache%202.0-yellow)](https://github.com/PKU-YuanGroup/MagicTime/blob/main/LICENSE) 
+![GitHub Repo stars](https://img.shields.io/github/stars/PKU-YuanGroup/MagicTime)
 
 </h5>
 

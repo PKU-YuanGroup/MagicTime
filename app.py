@@ -1,5 +1,6 @@
 import os
 import copy
+import time
 import torch
 import random
 import gradio as gr
@@ -7,14 +8,14 @@ from glob import glob
 from omegaconf import OmegaConf
 from safetensors import safe_open
 from diffusers import AutoencoderKL
-from diffusers import EulerDiscreteScheduler, DDIMScheduler
+from diffusers import DDIMScheduler
 from diffusers.utils.import_utils import is_xformers_available
 from transformers import CLIPTextModel, CLIPTokenizer
 
 from utils.unet import UNet3DConditionModel
 from utils.pipeline_magictime import MagicTimePipeline
 from utils.util import save_videos_grid, convert_ldm_unet_checkpoint, convert_ldm_clip_checkpoint, convert_ldm_vae_checkpoint, load_diffusers_lora_unet, convert_ldm_clip_text_model
-# import spaces
+import spaces
 
 pretrained_model_path   = "./ckpts/Base_Model/stable-diffusion-v1-5"
 inference_config_path   = "./sample_configs/RealisticVision.yaml"
@@ -66,7 +67,6 @@ device = torch.device('cuda:0')
 
 class MagicTimeController:
     def __init__(self):
-        
         # config dirs
         self.basedir                = os.getcwd()
         self.stable_diffusion_dir   = os.path.join(self.basedir, "ckpts", "Base_Model")
@@ -93,17 +93,10 @@ class MagicTimeController:
         self.unet                  = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", unet_additional_kwargs=OmegaConf.to_container(self.inference_config.unet_additional_kwargs)).to(device)
         self.text_model            = CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14")
         self.unet_model            = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", unet_additional_kwargs=OmegaConf.to_container(self.inference_config.unet_additional_kwargs))
-    
-        # self.tokenizer    = tokenizer
-        # self.text_encoder = text_encoder
-        # self.vae          = vae
-        # self.unet         = unet
-        # self.text_model   = text_model
 
         self.update_motion_module(self.motion_module_list[0])
         self.update_motion_module_2(self.motion_module_list[0])
         self.update_dreambooth(self.dreambooth_list[0])
-        
         
     def refresh_motion_module(self):
         motion_module_list = glob(os.path.join(self.motion_module_dir, "*.ckpt"))
@@ -113,7 +106,7 @@ class MagicTimeController:
         dreambooth_list = glob(os.path.join(self.personalized_model_dir, "*.safetensors"))
         self.dreambooth_list = [os.path.basename(p) for p in dreambooth_list]
 
-    def update_dreambooth(self, dreambooth_dropdown):
+    def update_dreambooth(self, dreambooth_dropdown, motion_module_dropdown=None):
         self.selected_dreambooth = dreambooth_dropdown
         
         dreambooth_dropdown = os.path.join(self.personalized_model_dir, dreambooth_dropdown)
@@ -124,24 +117,18 @@ class MagicTimeController:
         converted_vae_checkpoint = convert_ldm_vae_checkpoint(dreambooth_state_dict, self.vae.config)
         self.vae.load_state_dict(converted_vae_checkpoint)
 
-        if self.unet is not None:
-            del self.unet
-            torch.cuda.empty_cache()
-            torch.cuda.empty_cache()
-            torch.cuda.empty_cache()
-            torch.cuda.empty_cache()
-            torch.cuda.empty_cache()
+        del self.unet
+        self.unet = None
+        torch.cuda.empty_cache()
+        time.sleep(1)
         converted_unet_checkpoint = convert_ldm_unet_checkpoint(dreambooth_state_dict, self.unet_model.config)
         self.unet = copy.deepcopy(self.unet_model)
         self.unet.load_state_dict(converted_unet_checkpoint, strict=False)
 
-        if self.text_encoder is not None:
-            del self.text_encoder
-            torch.cuda.empty_cache()
-            torch.cuda.empty_cache()
-            torch.cuda.empty_cache()
-            torch.cuda.empty_cache()
-            torch.cuda.empty_cache()
+        del self.text_encoder
+        self.text_encoder = None
+        torch.cuda.empty_cache()
+        time.sleep(1)
         text_model = copy.deepcopy(self.text_model)
         self.text_encoder = convert_ldm_clip_text_model(text_model, dreambooth_state_dict)
 
@@ -169,7 +156,7 @@ class MagicTimeController:
         assert len(unexpected) == 0
         return gr.Dropdown()
 
-    # @spaces.GPU(duration=300)
+    @spaces.GPU(duration=300)
     def magictime(
         self,
         dreambooth_dropdown,
@@ -180,17 +167,23 @@ class MagicTimeController:
         height_slider,
         seed_textbox,
     ):
+        torch.cuda.empty_cache()
+        time.sleep(1)
+
         if self.selected_motion_module != motion_module_dropdown: self.update_motion_module(motion_module_dropdown)
         if self.selected_motion_module != motion_module_dropdown: self.update_motion_module_2(motion_module_dropdown)
         if self.selected_dreambooth != dreambooth_dropdown: self.update_dreambooth(dreambooth_dropdown)
         
+        while self.text_encoder is None or self.unet is None:
+            self.update_dreambooth(dreambooth_dropdown, motion_module_dropdown)
+
         if is_xformers_available(): self.unet.enable_xformers_memory_efficient_attention()
 
         pipeline = MagicTimePipeline(
             vae=self.vae, text_encoder=self.text_encoder, tokenizer=self.tokenizer, unet=self.unet,
             scheduler=DDIMScheduler(**OmegaConf.to_container(self.inference_config.noise_scheduler_kwargs))
-        ).to(device)
-        
+        ).to(device)     
+
         if int(seed_textbox) > 0: seed = int(seed_textbox)
         else: seed = random.randint(1, 1e16)
         torch.manual_seed(int(seed))
@@ -223,16 +216,12 @@ class MagicTimeController:
             "seed": seed,
             "dreambooth": dreambooth_dropdown,
         }
+
+        torch.cuda.empty_cache()
+        time.sleep(1)
         return gr.Video(value=save_sample_path), gr.Json(value=json_config)
 
-# inference_config = OmegaConf.load(inference_config_path)[1]
-# tokenizer        =  CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer")
-# text_encoder     =  CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder").cuda()
-# vae              =  AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae").cuda()
-# unet             =  UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", unet_additional_kwargs=OmegaConf.to_container(inference_config.unet_additional_kwargs)).cuda()
-# text_model       =  CLIPTextModel.from_pretrained("openai/clip-vit-large-patch14")
-# controller       = MagicTimeController(tokenizer=tokenizer, text_encoder=text_encoder, vae=vae, unet=unet, text_model=text_model)
-controller       = MagicTimeController()
+controller = MagicTimeController()
 
 def ui():
     with gr.Blocks(css=css) as demo:
@@ -252,9 +241,6 @@ def ui():
             with gr.Column():
                 dreambooth_dropdown     = gr.Dropdown( label="DreamBooth Model", choices=controller.dreambooth_list,    value=controller.dreambooth_list[0],    interactive=True )
                 motion_module_dropdown  = gr.Dropdown( label="Motion Module",  choices=controller.motion_module_list, value=controller.motion_module_list[0], interactive=True )
-
-                dreambooth_dropdown.change(fn=controller.update_dreambooth,       inputs=[dreambooth_dropdown],    outputs=[dreambooth_dropdown])
-                motion_module_dropdown.change(fn=controller.update_motion_module, inputs=[motion_module_dropdown], outputs=[motion_module_dropdown])
 
                 prompt_textbox          = gr.Textbox( label="Prompt",          lines=3 )
                 negative_prompt_textbox = gr.Textbox( label="Negative Prompt", lines=3, value="worst quality, low quality, nsfw, logo")
@@ -287,7 +273,6 @@ def ui():
         gr.Examples( fn=controller.magictime, examples=examples, inputs=inputs, outputs=outputs, cache_examples=True )
         
     return demo
-
 
 if __name__ == "__main__":
     demo = ui()

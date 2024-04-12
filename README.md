@@ -298,7 +298,7 @@ ChronoMagic with 2265 metamorphic time-lapse videos, each accompanied by a detai
 
 ## 🔒 License
 * The majority of this project is released under the Apache 2.0 license as found in the [LICENSE](https://github.com/PKU-YuanGroup/MagicTime/blob/main/LICENSE) file.
-* The service is a research preview intended for non-commercial use only. Please contact us if you find any potential violations.
+* The service is a research preview. Please contact us if you find any potential violations.
 
 ## ✏️ Citation
 If you find our paper and code useful in your research, please consider giving a star :star: and citation :pencil:.

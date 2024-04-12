@@ -125,7 +125,11 @@ class MagicTimeController:
         self.vae.load_state_dict(converted_vae_checkpoint)
 
         if self.unet is not None:
-            del self.unet  # 删除旧模型的引用
+            del self.unet
+            torch.cuda.empty_cache()
+            torch.cuda.empty_cache()
+            torch.cuda.empty_cache()
+            torch.cuda.empty_cache()
             torch.cuda.empty_cache()
         converted_unet_checkpoint = convert_ldm_unet_checkpoint(dreambooth_state_dict, self.unet_model.config)
         self.unet = copy.deepcopy(self.unet_model)
@@ -133,6 +137,10 @@ class MagicTimeController:
 
         if self.text_encoder is not None:
             del self.text_encoder
+            torch.cuda.empty_cache()
+            torch.cuda.empty_cache()
+            torch.cuda.empty_cache()
+            torch.cuda.empty_cache()
             torch.cuda.empty_cache()
         text_model = copy.deepcopy(self.text_model)
         self.text_encoder = convert_ldm_clip_text_model(text_model, dreambooth_state_dict)

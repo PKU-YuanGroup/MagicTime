@@ -257,7 +257,7 @@ git clone https://github.com/PKU-YuanGroup/MagicTime.git
 cd MagicTime
 conda create -n magictime python=3.10.13
 conda activate magictime
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
 
 ### Download Base Model and Dreambooth

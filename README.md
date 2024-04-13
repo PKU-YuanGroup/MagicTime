@@ -41,7 +41,7 @@ This repository is the official implementation of MagicTime, a metamorphic video
 ## 📣 News
 * ⏳⏳⏳ Training a stronger model with the support of [Open-Sora-Plan](https://github.com/PKU-YuanGroup/Open-Sora-Plan) (e.g 257 x 512 × 512).
 * ⏳⏳⏳ Release the training code of MagicTime.
-* `[2024.04.13]`  🔥 We have compressed the size of repo with only 427 KB, so that everyone can clone easier and faster.
+* `[2024.04.13]`  🔥 We have compressed the size of repo with only 427 KB, so that everyone can clone easier and faster. You can click [here](https://github.com/PKU-YuanGroup/MagicTime/archive/refs/heads/main.zip) to download, or use `git clone --depth=1` command to obtain this repo.
 * `[2024.04.12]`  Thanks [@Jukka Seppänen](https://github.com/kijai) and [Baobao Wang](https://www.bilibili.com/video/BV1wx421U7Gn/?spm_id_from=333.1007.top_right_bar_window_history.content.click) for providing ComfyUI Extension [ComfyUI-MagicTimeWrapper](https://github.com/kijai/ComfyUI-MagicTimeWrapper). If you find related work, please let us know. 
 * `[2024.04.11]`  🔥 We release the Hugging Face Space of MagicTime, you can [click](https://huggingface.co/spaces/BestWishYsh/MagicTime?logs=build) here to have a try.
 * `[2024.04.10]`  🔥 We release the inference code and model weight of MagicTime.

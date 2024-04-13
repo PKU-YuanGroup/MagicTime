@@ -256,7 +256,7 @@ We recommend the requirements as follows.
 ### Environment
 
 ```bash
-git clone https://github.com/PKU-YuanGroup/MagicTime.git
+git clone --depth=1 https://github.com/PKU-YuanGroup/MagicTime.git
 cd MagicTime
 conda create -n magictime python=3.10.13
 conda activate magictime

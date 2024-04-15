@@ -16,3 +16,4 @@ accelerate==0.28.0
 diffusers==0.11.1
 transformers==4.38.2
 spaces
+peft==0.9.0

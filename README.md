@@ -327,6 +327,8 @@ If you find our paper and code useful in your research, please consider giving a
   year={2024}
 }
 ```
+## ✨ Star History
+[![Star History](https://api.star-history.com/svg?repos=PKU-YuanGroup/MagicTime&type=Date)](https://star-history.com/#PKU-YuanGroup/MagicTime&Date)
 
 ## 🤝 Contributors
 <a href="https://github.com/PKU-YuanGroup/MagicTime/graphs/contributors">

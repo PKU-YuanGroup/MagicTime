@@ -11,7 +11,7 @@ gradio
 triton
 imageio[ffmpeg]
 imageio[pyav]
-ms-swift
+ms-swift==2.0.0
 accelerate==0.28.0
 diffusers==0.11.1
 transformers==4.38.2

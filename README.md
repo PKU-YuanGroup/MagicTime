@@ -287,7 +287,7 @@ sh prepare_weights/down_magictime_module.sh
 
 ## 🗝️ Training & Inference
 
-The training code is coming soon! For inference, some example are shown below:
+The training code is coming soon! For inference, some examples are shown below:
 
 ```bash
 # For Realistic

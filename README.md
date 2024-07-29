@@ -2,7 +2,7 @@
 <img src="__assets__/magictime_logo.png" width="150px">
 </div>
 <h2 align="center"> <a href="https://arxiv.org/abs/2404.05014">MagicTime: Time-lapse Video Generation Models 
-  
+
 <a href="https://arxiv.org/abs/2404.05014">as Metamorphic Simulators</a></h2>
 <h5 align="center"> If you like our project, please give us a star ⭐ on GitHub for the latest update.  </h2>
 
@@ -43,10 +43,11 @@ This repository is the official implementation of MagicTime, a metamorphic video
 > [![github](https://img.shields.io/badge/-Github-black?logo=github)](https://github.com/PKU-YuanGroup/ChronoMagic-Bench/)  [![github](https://img.shields.io/github/stars/PKU-YuanGroup/ChronoMagic-Bench.svg?style=social)](https://github.com/PKU-YuanGroup/ChronoMagic-Bench/)  <br>
 > </p></details>
 
- 
+
 ## 📣 News
-* ⏳⏳⏳ Training a stronger model with the support of [Open-Sora Plan](https://github.com/PKU-YuanGroup/Open-Sora-Plan) (e.g 257 x 512 × 512).
+* ⏳⏳⏳ Training a stronger model with the support of [Open-Sora Plan](https://github.com/PKU-YuanGroup/Open-Sora-Plan).
 * ⏳⏳⏳ Release the training code of MagicTime.
+* `[2024.07.29]`  We add *batch inference* to [inference_magictime.py](https://github.com/PKU-YuanGroup/MagicTime/blob/main/inference_magictime.py) for easier usage.
 * `[2024.06.27]`  Excited to share our latest [ChronoMagic-Bench](https://github.com/PKU-YuanGroup/ChronoMagic-Bench), a benchmark for metamorphic evaluation of text-to-time-lapse video generation, and is fully open source! Please check out the [paper](https://arxiv.org/abs/2406.18522).
 * `[2024.05.27]`  Excited to share our latest Open-Sora Plan v1.1.0, which significantly improves video quality and length, and is fully open source! Please check out the [report](https://github.com/PKU-YuanGroup/Open-Sora-Plan/blob/main/docs/Report-v1.1.0.md).
 * `[2024.04.14]`  Thanks [@camenduru](https://twitter.com/camenduru) and [@ModelsLab](https://modelslab.com/) for providing [Jupyter Notebook](https://github.com/camenduru/MagicTime-jupyter) and [Replicate Demo](https://replicate.com/camenduru/magictime).
@@ -55,7 +56,7 @@ This repository is the official implementation of MagicTime, a metamorphic video
 * `[2024.04.11]`  🔥 We release the Hugging Face Space of MagicTime, you can click [here](https://huggingface.co/spaces/BestWishYsh/MagicTime?logs=build) to have a try.
 * `[2024.04.10]`  🔥 We release the inference code and model weight of MagicTime.
 * `[2024.04.09]`  🔥 We release the arXiv paper for MagicTime, and you can click [here](https://arxiv.org/abs/2404.05014) to see more details.
-* `[2024.04.08]`  🔥 We released the subset of ChronoMagic dataset used to train MagicTime. The dataset includes 2,265 metamorphic video-text pairs and can be downloaded at [HuggingFace Dataset](https://huggingface.co/datasets/BestWishYsh/ChronoMagic) or [Google Drive](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing).
+* `[2024.04.08]`  🔥 We release the subset of ChronoMagic dataset used to train MagicTime. The dataset includes 2,265 metamorphic video-text pairs and can be downloaded at [HuggingFace Dataset](https://huggingface.co/datasets/BestWishYsh/ChronoMagic) or [Google Drive](https://drive.google.com/drive/folders/1WsomdkmSp3ql3ImcNsmzFuSQ9Qukuyr8?usp=sharing).
 * `[2024.04.08]`  🔥 **All codes & datasets** are coming soon! Stay tuned 👀!
 
 ## 😮 Highlights
@@ -287,7 +288,9 @@ sh prepare_weights/down_magictime_module.sh
 
 ## 🗝️ Training & Inference
 
-The training code is coming soon! For inference, some examples are shown below:
+The training code is coming soon! 
+
+For inference, some examples are shown below:
 
 ```bash
 # For Realistic
@@ -298,6 +301,17 @@ python inference_magictime.py --config sample_configs/ToonYou.yaml
 python inference_magictime.py --config sample_configs/RcnzCartoon.yaml
 # or you can directly run the .sh
 sh inference.sh
+```
+
+You can also put all your *custom prompts* in a <u>.txt</u> file and run:
+
+```bash
+# For Realistic
+python inference_magictime.py --config sample_configs/RealisticVision.yaml --run-txt XXX.txt --batch-size 2
+# For ToonYou
+python inference_magictime.py --config sample_configs/ToonYou.yaml --run-txt XXX.txt --batch-size 2
+# For RcnzCartoon
+python inference_magictime.py --config sample_configs/RcnzCartoon.yaml --run-txt XXX.txt --batch-size 2
 ```
 
 ## Community Contributions
@@ -343,6 +357,6 @@ If you find our paper and code useful in your research, please consider giving a
 ## 🤝 Contributors
 <a href="https://github.com/PKU-YuanGroup/MagicTime/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=PKU-YuanGroup/MagicTime&anon=true" />
-  
+
 </a>
 

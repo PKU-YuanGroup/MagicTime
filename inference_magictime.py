@@ -27,20 +27,12 @@ def main(args):
         globals()['counter'] = 0
     unique_id = globals()['counter']
     globals()['counter'] += 1
-    savedir_base = f"{Path(args.config).stem}"
-    savedir_prefix = "outputs"
     savedir = None
-    if args.save_path:
-        savedir = os.path.join(savedir_prefix, args.save_path, f"{savedir_base}-{unique_id}")
-    else:
-        savedir = os.path.join(savedir_prefix, f"{savedir_base}-{unique_id}")
+    savedir = os.path.join(args.save_path, f"{unique_id}")
     while os.path.exists(savedir):
         unique_id = globals()['counter']
         globals()['counter'] += 1
-        if args.save_path:
-            savedir = os.path.join(savedir_prefix, args.save_path, f"{savedir_base}-{unique_id}")
-        else:
-            savedir = os.path.join(savedir_prefix, f"{savedir_base}-{unique_id}")
+        savedir = os.path.join(args.save_path, f"{unique_id}")
     os.makedirs(savedir)
     print(f"The results will be save to {savedir}")
 
@@ -82,9 +74,8 @@ def main(args):
         magic_text_encoder_path=model_config.get("magic_text_encoder_path", ""),
     ).to("cuda")
 
-    sample_idx = 0
     if args.human:
-        sample_idx = 0  # Initialize sample index
+        sample_idx = 0
         while True:
             user_prompt = input("Enter your prompt (or type 'exit' to quit): ")
             if user_prompt.lower() == "exit":
@@ -96,8 +87,6 @@ def main(args):
             print(f"current seed: {random_seed}")
             print(f"sampling {user_prompt} ...")
 
-            # Now, you directly use `user_prompt` to generate a video.
-            # The following is a placeholder call; you need to adapt it to your actual video generation function.
             sample = pipeline(
                 user_prompt,
                 num_inference_steps=model_config.steps,
@@ -107,132 +96,95 @@ def main(args):
                 video_length=model_config.L,
             ).videos
 
-            # Adapt the filename to avoid conflicts and properly represent the content
             prompt_for_filename = "-".join(user_prompt.replace("/", "").split(" ")[:10])
             save_videos_grid(sample, f"{savedir}/sample/{sample_idx}-{random_seed}-{prompt_for_filename}.gif")
             print(f"save to {savedir}/sample/{sample_idx}-{random_seed}-{prompt_for_filename}.gif")
 
             sample_idx += 1
-    elif args.run_csv:
-        print("run_csv")
-        file_path = args.run_csv
-        data = pd.read_csv(file_path)
-        for index, row in data.iterrows():
-            user_prompt = row['name']  # Set the user_prompt to the 'name' field of the current row
-            videoid = row['videoid']  # Extract videoid for filename
+    else:
+        default = True
+        batch_size = args.batch_size
 
-            random_seed = torch.randint(0, 2 ** 32 - 1, (1,)).item()
+        if args.run_csv:
+            print("run csv")
+            default = False
+            file_path = args.run_csv
+            data = pd.read_csv(file_path)
+            prompts = data['name'].tolist()
+            videoids = data['videoid'].tolist()
+        elif args.run_json:
+            print("run json")
+            default = False
+            file_path = args.run_json
+            with open(file_path, 'r') as file:
+                data = json.load(file)
+            prompts = []
+            videoids = []
+            senids = []
+            for item in data['sentences']:
+                prompts.append(item['caption'])
+                videoids.append(item['video_id'])
+                senids.append(item['sen_id'])
+        elif args.run_txt:
+            print("run txt")
+            default = False
+            file_path = args.run_txt
+            with open(file_path, 'r') as file:
+                prompts = [line.strip() for line in file.readlines()]
+            videoids = [f"video_{i}" for i in range(len(prompts))]
+        else:
+            prompts = model_config.prompt
+            videoids = [f"video_{i}" for i in range(len(prompts))]
+
+        os.makedirs(savedir, exist_ok=True)
+
+        for i in range(0, len(prompts), batch_size):
+            batch_prompts_raw = prompts[i : i + batch_size]
+            batch_prompts = [prompt for prompt in batch_prompts_raw]
+
+            if args.run_csv or args.run_json or args.run_txt or default:
+                batch_videoids = videoids[i : i + batch_size]
+            if args.run_json:
+                batch_senids = senids[i : i + batch_size]
+
+            flag = True
+            for idx in range(len(batch_prompts)):
+                if args.run_csv or args.run_txt or default:
+                    new_filename = f"{batch_videoids[idx]}.mp4"
+                if args.run_json:
+                    new_filename = f"{batch_videoids[idx]}-{batch_senids[idx]}.mp4"
+                if not os.path.exists(os.path.join(savedir, new_filename)):
+                    flag = False
+                    break
+            if flag:
+                print("skipping")
+                continue
+
+            n_prompts  = list(model_config.n_prompt) * len(batch_prompts) if len(model_config.n_prompt) == 1 else model_config.n_prompt
+                
+            random_seed = torch.randint(0, 2**32 - 1, (1,)).item()
             torch.manual_seed(random_seed)
 
             print(f"current seed: {random_seed}")
-            print(f"sampling {user_prompt} ...")
 
-            sample = pipeline(
-                user_prompt,
-                num_inference_steps=model_config.steps,
-                guidance_scale=model_config.guidance_scale,
-                width=model_config.W,
-                height=model_config.H,
-                video_length=model_config.L,
+            results = pipeline(
+                batch_prompts,
+                negative_prompt     = n_prompts,
+                num_inference_steps = model_config.steps,
+                guidance_scale      = model_config.guidance_scale,
+                width               = model_config.W,
+                height              = model_config.H,
+                video_length        = model_config.L,
             ).videos
 
-            # Adapt the filename to avoid conflicts and properly represent the content
-            save_videos_grid(sample, f"{savedir}/sample/{videoid}.gif")
-            print(f"save to {savedir}/sample/{videoid}.gif")
-    elif args.run_json:
-        print("run_json")
-        file_path = args.run_json
+            for idx, sample in enumerate(results):
+                if args.run_csv or args.run_txt or default:
+                    new_filename = f"{batch_videoids[idx]}.mp4"
+                if args.run_json:
+                    new_filename = f"{batch_videoids[idx]}-{batch_senids[idx]}.mp4"
 
-        with open(file_path, 'r') as file:
-            data = json.load(file)
-
-        prompts = []
-        videoids = []
-        senids = []
-
-        for item in data:
-            prompts.append(item['caption'])
-            videoids.append(item['video_id'])
-            senids.append(item['sen_id'])
-
-        n_prompts = list(model_config.n_prompt) * len(prompts) if len(
-            model_config.n_prompt) == 1 else model_config.n_prompt
-
-        random_seeds = model_config.get("seed", [-1])
-        random_seeds = [random_seeds] if isinstance(random_seeds, int) else list(random_seeds)
-        random_seeds = random_seeds * len(prompts) if len(random_seeds) == 1 else random_seeds
-
-        model_config.random_seed = []
-        for prompt_idx, (prompt, n_prompt, random_seed) in enumerate(zip(prompts, n_prompts, random_seeds)):
-            filename = f"MSRVTT/sample/{videoids[prompt_idx]}-{senids[prompt_idx]}.gif"
-
-            if os.path.exists(filename):
-                print(f"File {filename} already exists, skipping...")
-                continue
-
-            # manually set random seed for reproduction
-            if random_seed != -1:
-                torch.manual_seed(random_seed)
-            else:
-                torch.seed()
-            model_config.random_seed.append(torch.initial_seed())
-
-            print(f"current seed: {torch.initial_seed()}")
-            print(f"sampling {prompt} ...")
-
-            sample = pipeline(
-                prompt,
-                num_inference_steps=model_config.steps,
-                guidance_scale=model_config.guidance_scale,
-                width=model_config.W,
-                height=model_config.H,
-                video_length=model_config.L,
-            ).videos
-
-            # Adapt the filename to avoid conflicts and properly represent the content
-            save_videos_grid(sample, filename)
-            print(f"save to {filename}")
-    else:
-        prompts = model_config.prompt
-        n_prompts = list(model_config.n_prompt) * len(prompts) if len(
-            model_config.n_prompt) == 1 else model_config.n_prompt
-
-        random_seeds = model_config.get("seed", [-1])
-        random_seeds = [random_seeds] if isinstance(random_seeds, int) else list(random_seeds)
-        random_seeds = random_seeds * len(prompts) if len(random_seeds) == 1 else random_seeds
-
-        model_config.random_seed = []
-        for prompt_idx, (prompt, n_prompt, random_seed) in enumerate(zip(prompts, n_prompts, random_seeds)):
-
-            # manually set random seed for reproduction
-            if random_seed != -1:
-                torch.manual_seed(random_seed)
-                np.random.seed(random_seed)
-                random.seed(random_seed)
-            else:
-                torch.seed()
-            model_config.random_seed.append(torch.initial_seed())
-
-            print(f"current seed: {torch.initial_seed()}")
-            print(f"sampling {prompt} ...")
-            sample = pipeline(
-                prompt,
-                negative_prompt=n_prompt,
-                num_inference_steps=model_config.steps,
-                guidance_scale=model_config.guidance_scale,
-                width=model_config.W,
-                height=model_config.H,
-                video_length=model_config.L,
-            ).videos
-            samples.append(sample)
-
-            prompt = "-".join((prompt.replace("/", "").split(" ")[:10]))
-            save_videos_grid(sample, f"{savedir}/sample/{sample_idx}-{random_seed}-{prompt}.gif")
-            print(f"save to {savedir}/sample/{random_seed}-{prompt}.gif")
-
-            sample_idx += 1
-        samples = torch.concat(samples)
-        save_videos_grid(samples, f"{savedir}/merge_all.gif", n_rows=4)
+                save_videos_grid(sample.unsqueeze(0), f"{savedir}/{new_filename}")
+                print(f"save to {savedir}/{new_filename}")
 
     OmegaConf.save(model_config, f"{savedir}/model_config.yaml")
 
@@ -243,7 +195,9 @@ if __name__ == "__main__":
     parser.add_argument("--human", action="store_true", help="Enable human mode for interactive video generation")
     parser.add_argument("--run-csv", type=str, default=None)
     parser.add_argument("--run-json", type=str, default=None)
-    parser.add_argument("--save-path", type=str, default=None)
-
+    parser.add_argument("--run-txt", type=str, default=None)
+    parser.add_argument("--save-path", type=str, default="outputs")
+    parser.add_argument("--batch-size", type=int, default=1)
+    
     args = parser.parse_args()
     main(args)

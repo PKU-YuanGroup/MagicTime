@@ -47,6 +47,7 @@ This repository is the official implementation of MagicTime, a metamorphic video
 ## 📣 News
 * ⏳⏳⏳ Training a stronger model with the support of [Open-Sora Plan](https://github.com/PKU-YuanGroup/Open-Sora-Plan).
 * ⏳⏳⏳ Release the training code of MagicTime.
+* ⏳⏳⏳ Integrate MagicTime into [Diffusers](https://huggingface.co/docs/transformers/index). 🙏 **[Need your contribution]**
 * `[2024.07.29]`  We add *batch inference* to [inference_magictime.py](https://github.com/PKU-YuanGroup/MagicTime/blob/main/inference_magictime.py) for easier usage.
 * `[2024.06.27]`  Excited to share our latest [ChronoMagic-Bench](https://github.com/PKU-YuanGroup/ChronoMagic-Bench), a benchmark for metamorphic evaluation of text-to-time-lapse video generation, and is fully open source! Please check out the [paper](https://arxiv.org/abs/2406.18522).
 * `[2024.05.27]`  Excited to share our latest Open-Sora Plan v1.1.0, which significantly improves video quality and length, and is fully open source! Please check out the [report](https://github.com/PKU-YuanGroup/Open-Sora-Plan/blob/main/docs/Report-v1.1.0.md).
@@ -318,9 +319,10 @@ python inference_magictime.py --config sample_configs/RcnzCartoon.yaml --run-txt
 
 We found some plugins created by community developers. Thanks for their efforts: 
 
-  - ComfyUI Extension [ComfyUI-MagicTimeWrapper](https://github.com/kijai/ComfyUI-MagicTimeWrapper) (by [@Jukka Seppänen](https://github.com/kijai)). And you can click [here](https://www.bilibili.com/video/BV1wx421U7Gn/?spm_id_from=333.1007.top_right_bar_window_history.content.click) to view the installation tutorial.
-  - Replicate Demo & Cloud API [Replicate-MagicTime](https://replicate.com/camenduru/magictime) (by [@camenduru](https://twitter.com/camenduru)).
-  - Jupyter Notebook [Jupyter-MagicTime](https://github.com/camenduru/MagicTime-jupyter) (by [@ModelsLab](https://modelslab.com/)).
+  - ComfyUI Extension. [ComfyUI-MagicTimeWrapper](https://github.com/kijai/ComfyUI-MagicTimeWrapper) (by [@Jukka Seppänen](https://github.com/kijai)). And you can click [here](https://www.bilibili.com/video/BV1wx421U7Gn/?spm_id_from=333.1007.top_right_bar_window_history.content.click) to view the installation tutorial.
+  - Replicate Demo & Cloud API. [Replicate-MagicTime](https://replicate.com/camenduru/magictime) (by [@camenduru](https://twitter.com/camenduru)).
+  - Jupyter Notebook. [Jupyter-MagicTime](https://github.com/camenduru/MagicTime-jupyter) (by [@ModelsLab](https://modelslab.com/)).
+  - Diffusers. We need your help to integrate MagicTime into [Diffusers](https://huggingface.co/docs/diffusers). 🙏 **[Need your contribution]**
 
 If you find related work, please let us know. 
 

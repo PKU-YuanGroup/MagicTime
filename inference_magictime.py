@@ -1,13 +1,9 @@
 import os
 import json
-import time
 import torch
-import random
 import inspect
 import argparse
-import numpy as np
 import pandas as pd
-from pathlib import Path
 from omegaconf import OmegaConf
 from transformers import CLIPTextModel, CLIPTokenizer
 from diffusers import AutoencoderKL, DDIMScheduler
@@ -33,7 +29,7 @@ def main(args):
         unique_id = globals()['counter']
         globals()['counter'] += 1
         savedir = os.path.join(args.save_path, f"{unique_id}")
-    os.makedirs(savedir)
+    os.makedirs(savedir, exist_ok=True)
     print(f"The results will be save to {savedir}")
 
     model_config = OmegaConf.load(args.config)[0]
@@ -46,17 +42,13 @@ def main(args):
     if model_config.magic_text_encoder_path:
         print("Use Magic_Text_Encoder")
 
-    samples = []
-
-    # create validation pipeline
     tokenizer    = CLIPTokenizer.from_pretrained(model_config.pretrained_model_path, subfolder="tokenizer")
     text_encoder = CLIPTextModel.from_pretrained(model_config.pretrained_model_path, subfolder="text_encoder").cuda()
     vae          = AutoencoderKL.from_pretrained(model_config.pretrained_model_path, subfolder="vae").cuda()
-    unet = UNet3DConditionModel.from_pretrained_2d(model_config.pretrained_model_path, subfolder="unet",
-                                                   unet_additional_kwargs=OmegaConf.to_container(
-                                                       inference_config.unet_additional_kwargs)).cuda()
+    unet         = UNet3DConditionModel.from_pretrained_2d(model_config.pretrained_model_path, subfolder="unet",
+                                                            unet_additional_kwargs=OmegaConf.to_container(
+                                                            inference_config.unet_additional_kwargs)).cuda()
 
-    # set xformers
     if is_xformers_available() and (not args.without_xformers):
         unet.enable_xformers_memory_efficient_attention()
 
@@ -89,16 +81,17 @@ def main(args):
 
             sample = pipeline(
                 user_prompt,
-                num_inference_steps=model_config.steps,
-                guidance_scale=model_config.guidance_scale,
-                width=model_config.W,
-                height=model_config.H,
-                video_length=model_config.L,
+                negative_prompt     = list(model_config.n_prompt),
+                num_inference_steps = model_config.steps,
+                guidance_scale      = model_config.guidance_scale,
+                width               = model_config.W,
+                height              = model_config.H,
+                video_length        = model_config.L,
             ).videos
 
             prompt_for_filename = "-".join(user_prompt.replace("/", "").split(" ")[:10])
-            save_videos_grid(sample, f"{savedir}/sample/{sample_idx}-{random_seed}-{prompt_for_filename}.gif")
-            print(f"save to {savedir}/sample/{sample_idx}-{random_seed}-{prompt_for_filename}.gif")
+            save_videos_grid(sample, f"{savedir}/sample/{sample_idx}-{random_seed}-{prompt_for_filename}.mp4")
+            print(f"save to {savedir}/sample/{sample_idx}-{random_seed}-{prompt_for_filename}.mp4")
 
             sample_idx += 1
     else:
@@ -135,8 +128,6 @@ def main(args):
         else:
             prompts = model_config.prompt
             videoids = [f"video_{i}" for i in range(len(prompts))]
-
-        os.makedirs(savedir, exist_ok=True)
 
         for i in range(0, len(prompts), batch_size):
             batch_prompts_raw = prompts[i : i + batch_size]

@@ -30,7 +30,7 @@ This repository is the official implementation of MagicTime, a metamorphic video
 
 
 <br>
-<details open><summary>💡 We also have other video generation project that may interest you ✨. </summary><p>
+<details open><summary>💡 We also have other video generation projects that may interest you ✨. </summary><p>
 <!--  may -->
 
 

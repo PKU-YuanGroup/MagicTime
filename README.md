@@ -38,6 +38,10 @@ This repository is the official implementation of MagicTime, a metamorphic video
 > PKU-Yuan Lab and Tuzhan AI etc. <br>
 > [![github](https://img.shields.io/badge/-Github-black?logo=github)](https://github.com/PKU-YuanGroup/Open-Sora-Plan)  [![github](https://img.shields.io/github/stars/PKU-YuanGroup/Open-Sora-Plan.svg?style=social)](https://github.com/PKU-YuanGroup/Open-Sora-Plan)  <br>
 >
+> [**ConsisID**](https://arxiv.org/abs/2411.17440) <br>
+> Shenghai Yuan, Jinfa Huang and Xianyi He etc. <br>
+> [![github](https://img.shields.io/badge/-Github-black?logo=github)](https://github.com/PKU-YuanGroup/ConsisID/)  [![github](https://img.shields.io/github/stars/PKU-YuanGroup/ConsisID.svg?style=social)](https://github.com/PKU-YuanGroup/ConsisID/)  <br>
+>
 > [**ChronoMagic-Bench**](https://arxiv.org/abs/2406.18522) <br>
 > Shenghai Yuan, Jinfa Huang and Yongqi Xu etc. <br>
 > [![github](https://img.shields.io/badge/-Github-black?logo=github)](https://github.com/PKU-YuanGroup/ChronoMagic-Bench/)  [![github](https://img.shields.io/github/stars/PKU-YuanGroup/ChronoMagic-Bench.svg?style=social)](https://github.com/PKU-YuanGroup/ChronoMagic-Bench/)  <br>

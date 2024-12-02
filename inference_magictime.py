@@ -8,6 +8,7 @@ from omegaconf import OmegaConf
 from transformers import CLIPTextModel, CLIPTokenizer
 from diffusers import AutoencoderKL, DDIMScheduler
 from diffusers.utils.import_utils import is_xformers_available
+from huggingface_hub import snapshot_download
 
 from utils.unet import UNet3DConditionModel
 from utils.pipeline_magictime import MagicTimePipeline
@@ -191,4 +192,5 @@ if __name__ == "__main__":
     parser.add_argument("--batch-size", type=int, default=1)
     
     args = parser.parse_args()
+    snapshot_download(repo_id="BestWishYsh/MagicTime", local_dir="ckpts")
     main(args)

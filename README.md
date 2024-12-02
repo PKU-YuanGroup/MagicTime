@@ -278,17 +278,34 @@ conda activate magictime
 pip install -r requirements.txt
 ```
 
-### Download Base Model and Dreambooth
+### Download MagicTime
+
+The weights are available at [🤗HuggingFace](https://huggingface.co/BestWishYsh/MagicTime/tree/main) and [🟣WiseModel](https://wisemodel.cn/models/SHYuanBest/MagicTime/file), or you can download it with the following commands.
 
 ```bash
-sh prepare_weights/down_base_model.sh
-sh prepare_weights/down_dreambooth.sh
+# way 1
+# if you are in china mainland, run this first: export HF_ENDPOINT=https://hf-mirror.com
+huggingface-cli download --repo-type model \
+BestWishYsh/MagicTime \
+--local-dir ckpts
+
+# way 2
+git lfs install
+git clone https://www.wisemodel.cn/SHYuanBest/MagicTime.git
 ```
 
-### Prepare MagicTime Module
+Once ready, the weights will be organized in this format:
 
-```bash
-sh prepare_weights/down_magictime_module.sh
+```
+📦 ckpts/
+├── 📂 Base_Model/
+│   ├── 📂 motion_module/
+│   ├── 📂 stable-diffusion-v1-5/
+├── 📂 DreamBooth/
+├── 📂 Magic_Weights/
+│   ├── 📂 magic_adapter_s/
+│   ├── 📂 magic_adapter_t/
+│   ├── 📂 magic_text_encoder/
 ```
 
 ## 🗝️ Training & Inference

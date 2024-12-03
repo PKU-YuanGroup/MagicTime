@@ -1,5 +1,5 @@
 <div align=center>
-<img src="__assets__/magictime_logo.png" width="150px">
+<img src="https://github.com/PKU-YuanGroup/MagicTime/blob/main/__assets__/magictime_logo.png?raw=true" width="150px">
 </div>
 <h2 align="center"> <a href="https://arxiv.org/abs/2404.05014">MagicTime: Time-lapse Video Generation Models 
 

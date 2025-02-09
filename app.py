@@ -19,7 +19,7 @@ from utils.util import save_videos_grid, convert_ldm_unet_checkpoint, convert_ld
 
 from huggingface_hub import snapshot_download
 
-model_path = "/storage/ysh/Ckpts/MagicTime"
+model_path = "ckpts"
 
 if not os.path.exists(model_path) or not os.path.exists(f"{model_path}/model_real_esran") or not os.path.exists(f"{model_path}/model_rife"):
     print("Model not found, downloading from Hugging Face...")

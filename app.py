@@ -17,11 +17,21 @@ from utils.pipeline_magictime import MagicTimePipeline
 from utils.util import save_videos_grid, convert_ldm_unet_checkpoint, convert_ldm_clip_checkpoint, convert_ldm_vae_checkpoint, load_diffusers_lora_unet, convert_ldm_clip_text_model
 # import spaces
 
-pretrained_model_path   = "./ckpts/Base_Model/stable-diffusion-v1-5"
-inference_config_path   = "./sample_configs/RealisticVision.yaml"
-magic_adapter_s_path    = "./ckpts/Magic_Weights/magic_adapter_s/magic_adapter_s.ckpt"
-magic_adapter_t_path    = "./ckpts/Magic_Weights/magic_adapter_t"
-magic_text_encoder_path = "./ckpts/Magic_Weights/magic_text_encoder"
+from huggingface_hub import snapshot_download
+
+model_path = "/storage/ysh/Ckpts/MagicTime"
+
+if not os.path.exists(model_path) or not os.path.exists(f"{model_path}/model_real_esran") or not os.path.exists(f"{model_path}/model_rife"):
+    print("Model not found, downloading from Hugging Face...")
+    snapshot_download(repo_id="BestWishYsh/MagicTime", local_dir=f"{model_path}")
+else:
+    print(f"Model already exists in {model_path}, skipping download.")
+    
+pretrained_model_path   = f"{model_path}/Base_Model/stable-diffusion-v1-5"
+inference_config_path   = "sample_configs/RealisticVision.yaml"
+magic_adapter_s_path    = f"{model_path}/Magic_Weights/magic_adapter_s/magic_adapter_s.ckpt"
+magic_adapter_t_path    = f"{model_path}/Magic_Weights/magic_adapter_t"
+magic_text_encoder_path = f"{model_path}/Magic_Weights/magic_text_encoder"
 
 css = """
 .toolbutton {
@@ -63,15 +73,18 @@ examples = [
 print(f"### Cleaning cached examples ...")
 os.system(f"rm -rf gradio_cached_examples/")
 
-device = torch.device('cuda:0')
+device = "cuda"
+
+def random_seed():
+    return random.randint(1, 10**16)
 
 class MagicTimeController:
     def __init__(self):
         # config dirs
         self.basedir                = os.getcwd()
-        self.stable_diffusion_dir   = os.path.join(self.basedir, "ckpts", "Base_Model")
-        self.motion_module_dir      = os.path.join(self.basedir, "ckpts", "Base_Model", "motion_module")
-        self.personalized_model_dir = os.path.join(self.basedir, "ckpts", "DreamBooth")
+        self.stable_diffusion_dir   = os.path.join(self.basedir, model_path, "Base_Model")
+        self.motion_module_dir      = os.path.join(self.basedir, model_path, "Base_Model", "motion_module")
+        self.personalized_model_dir = os.path.join(self.basedir, model_path, "DreamBooth")
         self.savedir                = os.path.join(self.basedir, "outputs")
         os.makedirs(self.savedir, exist_ok=True)
 
@@ -185,7 +198,7 @@ class MagicTimeController:
         ).to(device)     
 
         if int(seed_textbox) > 0: seed = int(seed_textbox)
-        else: seed = random.randint(1, 1e16)
+        else: seed = random_seed()
         torch.manual_seed(int(seed))
         
         assert seed == torch.initial_seed()
@@ -239,38 +252,38 @@ def ui():
         )
         with gr.Row():
             with gr.Column():
-                dreambooth_dropdown     = gr.Dropdown( label="DreamBooth Model", choices=controller.dreambooth_list,    value=controller.dreambooth_list[0],    interactive=True )
-                motion_module_dropdown  = gr.Dropdown( label="Motion Module",  choices=controller.motion_module_list, value=controller.motion_module_list[0], interactive=True )
+                dreambooth_dropdown     = gr.Dropdown(label="DreamBooth Model", choices=controller.dreambooth_list, value=controller.dreambooth_list[0], interactive=True)
+                motion_module_dropdown  = gr.Dropdown(label="Motion Module", choices=controller.motion_module_list, value=controller.motion_module_list[0], interactive=True)
 
-                prompt_textbox          = gr.Textbox( label="Prompt",          lines=3 )
-                negative_prompt_textbox = gr.Textbox( label="Negative Prompt", lines=3, value="worst quality, low quality, nsfw, logo")
+                prompt_textbox          = gr.Textbox(label="Prompt", lines=3)
+                negative_prompt_textbox = gr.Textbox(label="Negative Prompt", lines=3, value="worst quality, low quality, nsfw, logo")
 
                 with gr.Accordion("Advance", open=False):
                     with gr.Row():
-                        width_slider  = gr.Slider(  label="Width",  value=512, minimum=256, maximum=1024, step=64 )
-                        height_slider = gr.Slider(  label="Height", value=512, minimum=256, maximum=1024, step=64 )
+                        width_slider  = gr.Slider(label="Width", value=512, minimum=256, maximum=1024, step=64)
+                        height_slider = gr.Slider(label="Height", value=512, minimum=256, maximum=1024, step=64)
                     with gr.Row():
-                        seed_textbox = gr.Textbox( label="Seed (-1 means random)",  value=-1)
+                        seed_textbox = gr.Textbox(label="Seed (-1 means random)", value="-1")
                         seed_button  = gr.Button(value="\U0001F3B2", elem_classes="toolbutton")
-                        seed_button.click(fn=lambda: gr.Textbox(value=random.randint(1, 1e16)), inputs=[], outputs=[seed_textbox])
+                        seed_button.click(fn=random_seed, inputs=[], outputs=[seed_textbox])
 
-                generate_button = gr.Button( value="Generate", variant='primary' )
+                generate_button = gr.Button(value="Generate", variant='primary')
 
             with gr.Column():
-                result_video = gr.Video( label="Generated Animation", interactive=False )
-                json_config  = gr.Json( label="Config", value=None )
+                result_video = gr.Video(label="Generated Animation", interactive=False)
+                json_config  = gr.Json(label="Config", value={})
 
             inputs  = [dreambooth_dropdown, motion_module_dropdown, prompt_textbox, negative_prompt_textbox, width_slider, height_slider, seed_textbox]
             outputs = [result_video, json_config]
-            
-            generate_button.click( fn=controller.magictime, inputs=inputs, outputs=outputs )
-        
-        gr.Markdown(
-            """
-            <h5 style="text-align:left;">Warning: It is worth noting that even if we use the same seed and prompt but we change a machine, the results will be different. If you find a better seed and prompt, please tell me in a GitHub issue.</h5>
-            """
-        )        
-        gr.Examples( fn=controller.magictime, examples=examples, inputs=inputs, outputs=outputs, cache_examples=True )
+
+            generate_button.click(fn=controller.magictime, inputs=inputs, outputs=outputs)
+
+        gr.Markdown("""
+        <h5 style="text-align:left;">⚠ Warning: Even if you use the same seed and prompt, changing machines may produce different results. 
+        If you find a better seed and prompt, please submit an issue on GitHub.</h5>
+        """)
+
+        gr.Examples(fn=controller.magictime, examples=examples, inputs=inputs, outputs=outputs, cache_examples=True)
         
     return demo
 

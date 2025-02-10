@@ -59,9 +59,8 @@ def load_existing_results(file_path):
             return empty_data
 
 @retry(wait=wait_exponential(multiplier=1, min=2, max=10), stop=stop_after_attempt(100))
-def call_gpt(prompt, model_name="gpt-4-vision-preview"):
-    client = OpenAI(api_key="sk-cIDmoiPJrk8XLIRm2a07943eD70744878866555319DeA4F7",
-                    base_url="https://reverse.onechat.fun/v1")
+def call_gpt(prompt, model_name="gpt-4-vision-preview", api_key=None):
+    client = OpenAI(api_key=api_key)
     chat_completion = client.chat.completions.create(
         model=model_name,
         messages=[
@@ -74,9 +73,9 @@ def call_gpt(prompt, model_name="gpt-4-vision-preview"):
     )
     return chat_completion.choices[0].message.content
 
-def save_output(video_id, prompt, output_file):
+def save_output(video_id, prompt, output_file, api_key):
     if not has_been_processed(video_id, output_file):
-        result = call_gpt(prompt)
+        result = call_gpt(prompt, api_key=api_key)
         with file_lock:
             with open(output_file, 'r+') as f:
                 # Read the current data and update it
@@ -87,7 +86,7 @@ def save_output(video_id, prompt, output_file):
                 f.truncate()  # Truncate file to new size
         print(f"Processed and saved output for Video ID {video_id}")
 
-def main(num_workers, all_prompts, output_file):
+def main(num_workers, all_prompts, output_file, api_key):
     # Load existing results
     existing_results = load_existing_results(output_file)
 
@@ -103,7 +102,7 @@ def main(num_workers, all_prompts, output_file):
 
     with ThreadPoolExecutor(max_workers=num_workers) as executor:
         future_to_index = {
-            executor.submit(save_output, video_id, prompt, output_file): video_id 
+            executor.submit(save_output, video_id, prompt, output_file, api_key): video_id 
             for video_id, prompt in unprocessed_prompts.items()
         }
 
@@ -119,6 +118,7 @@ def main(num_workers, all_prompts, output_file):
 if __name__ == "__main__":
     # Set up argument parser
     parser = argparse.ArgumentParser(description="Generate video captions using GPT4V.")
+    parser.add_argument("--api_key", type=int, default=None, help="OpenAI API key.")
     parser.add_argument("--num_workers", type=int, default=8, help="Number of worker threads for processing.")
     parser.add_argument("--input_file", type=str, default="./2_2_final_useful_gpt_frames_caption.json", help="Path to the input JSON file.")
     parser.add_argument("--output_file", type=str, default="./3_1_gpt_video_caption.json", help="Path to save the generated video captions.")
@@ -134,4 +134,4 @@ if __name__ == "__main__":
     prompts = create_prompts(txt_prompt, data)
 
     # Execute main processing function
-    main(args.num_workers, prompts, args.output_file)
+    main(args.num_workers, prompts, args.output_file, args.api_key)

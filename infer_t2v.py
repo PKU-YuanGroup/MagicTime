@@ -54,8 +54,8 @@ def rephrase_prompt(processor, model, short_prompt=" ", seed=42):
 
     return output_text
 
-# Load the CogVideo I2V pipeline 
-def load_cogvideo_i2v(model_path="THUDM/CogVideoX-5b",
+# Load the CogVideo T2V pipeline 
+def load_cogvideo_t2v(model_path="THUDM/CogVideoX-5b",
                       custom_transformer_state_dict=None,
                       vae_tile=True,
                       transformer_compile=False,
@@ -151,9 +151,9 @@ def main(args):
     create_folder_if_not_exist(os.path.join(output_path, current_time))
     os.makedirs(txt_output_path, exist_ok=True)
 
-    # Load the I2V model and prompt rephraser
+    # Load the T2V model and prompt rephraser
     print("Load Pipeline")
-    t2v_pipeline = load_cogvideo_i2v(model_path, 
+    t2v_pipeline = load_cogvideo_t2v(model_path, 
                                      custom_transformer_state_dict=transformer_ckpt, 
                                      device=device)
 
@@ -183,7 +183,7 @@ def main(args):
                         negative_prompt=negative_prompt,
                         use_dynamic_cfg=True, 
                         generator=generator,
-                        num_frames=81,
+                        num_frames=49,
                         height=480, 
                         width=720, 
                         guidance_scale=6,
@@ -202,7 +202,7 @@ def main(args):
 if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--qwen_path', type=str, default="/storage/ysh/Ckpts/Qwen2.5-7B-Instruct/")
-    parser.add_argument('--model_path', type=str, default="/storage/ysh/Ckpts/OmniConsisID_544p")   # I2V_HF_format_V0.5.1_720p: [(720, 1280), (720, 720), (1280, 720)]
+    parser.add_argument('--model_path', type=str, default="/storage/ysh/Ckpts/OmniConsisID_544p")
     parser.add_argument('--output_path', type=str, default="samples/test")
     parser.add_argument('--prompt_file', type=str, default="inference/test_prompts.txt")
     parser.add_argument('--txt_output_path', type=str, default="samples/txt")

@@ -50,6 +50,7 @@ This repository is the official implementation of MagicTime, a metamorphic video
 ## 📣 News
 * ⏳⏳⏳ Training a stronger model with the support of [Open-Sora Plan](https://github.com/PKU-YuanGroup/Open-Sora-Plan).
 * ⏳⏳⏳ Release the training code of MagicTime.
+* `[2025.04.08]`  🔥 We have updated our technical report. Please click [here](https://arxiv.org/abs/2404.05014) to view it.
 * `[2025.03.28]`  🔥 MagicTime has been accepted by **TPAMI**, and we will update arXiv with more details soon, keep tuned!
 * `[2024.07.29]`  We add *batch inference* to [inference_magictime.py](https://github.com/PKU-YuanGroup/MagicTime/blob/main/inference_magictime.py) for easier usage.
 * `[2024.06.27]`  Excited to share our latest [ChronoMagic-Bench](https://github.com/PKU-YuanGroup/ChronoMagic-Bench), a benchmark for metamorphic evaluation of text-to-time-lapse video generation, and is fully open source! Please check out the [paper](https://arxiv.org/abs/2406.18522).

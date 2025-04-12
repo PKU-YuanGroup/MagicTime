@@ -392,11 +392,12 @@ huggingface-cli download --repo-type dataset \
 If you find our paper and code useful in your research, please consider giving a star :star: and citation :pencil:.
 
 ```BibTeX
-@article{yuan2024magictime,
-  title={MagicTime: Time-lapse Video Generation Models as Metamorphic Simulators},
+@article{yuan2025magictime,
+  title={Magictime: Time-lapse video generation models as metamorphic simulators},
   author={Yuan, Shenghai and Huang, Jinfa and Shi, Yujun and Xu, Yongqi and Zhu, Ruijie and Lin, Bin and Cheng, Xinhua and Yuan, Li and Luo, Jiebo},
-  journal={arXiv preprint arXiv:2404.05014},
-  year={2024}
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  year={2025},
+  publisher={IEEE}
 }
 ```
 

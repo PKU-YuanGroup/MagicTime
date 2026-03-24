@@ -6,6 +6,10 @@ OUTPUT_FOLDER_STEP_1="./step_1"
 API_KEY="XXX"
 NUM_WORKERS=8
 
+# LLM provider: "openai" (default) or "minimax"
+# For MiniMax, set MINIMAX_API_KEY env var and change PROVIDER to "minimax"
+PROVIDER="openai"
+
 # File paths
 FRAME_CAPTION_FILE="./2_1_gpt_frames_caption.json"
 GROUP_FRAMES_FILE="./2_1_temp_group_frames.json"
@@ -22,22 +26,25 @@ FINAL_CSV_FILE="./all_clean_data.csv"
 # Step 1: Extract and resize frames
 python step0_extract_frame_resize.py --input_folder "$INPUT_FOLDER" --output_folder "$OUTPUT_FOLDER_STEP_1"
 
-# Step 2.1: Generate frame captions using GPT-4V
+# Step 2.1: Generate frame captions using LLM (GPT-4V or MiniMax)
 python step2_1_GPT4V_frame_caption.py --api_key "$API_KEY" --num_workers "$NUM_WORKERS" \
-    --output_file "$FRAME_CAPTION_FILE" --group_frames_file "$GROUP_FRAMES_FILE" --image_directories "$OUTPUT_FOLDER_STEP_1"
+    --output_file "$FRAME_CAPTION_FILE" --group_frames_file "$GROUP_FRAMES_FILE" --image_directories "$OUTPUT_FOLDER_STEP_1" \
+    --provider "$PROVIDER"
 
 # Step 2.2: Preprocess frame captions
 python step2_2_preprocess_frame_caption.py --file_path "$FRAME_CAPTION_FILE" \
     --updated_file_path "$UPDATED_FRAME_CAPTION_FILE" --unmatched_file_path "$UNMATCHED_FRAME_CAPTION_FILE" \
     --unordered_file_path "$UNORDERED_FRAME_CAPTION_FILE" --final_useful_data_file_path "$FINAL_USEFUL_FRAME_CAPTION_FILE"
 
-# Step 3.1: Generate concise video captions using GPT-4V
+# Step 3.1: Generate concise video captions using LLM (GPT-4V or MiniMax)
 python step3_1_GPT4V_video_caption_concise.py --num_workers "$NUM_WORKERS" \
-    --input_file "$FINAL_USEFUL_FRAME_CAPTION_FILE" --output_file "$VIDEO_CAPTION_FILE"
+    --input_file "$FINAL_USEFUL_FRAME_CAPTION_FILE" --output_file "$VIDEO_CAPTION_FILE" \
+    --provider "$PROVIDER"
 
 # Optional: Generate detailed video captions (uncomment to enable)
 # python step3_1_GPT4V_video_caption_detail.py --num_workers "$NUM_WORKERS" \
-#     --input_file "$FINAL_USEFUL_FRAME_CAPTION_FILE" --output_file "$VIDEO_CAPTION_FILE"
+#     --input_file "$FINAL_USEFUL_FRAME_CAPTION_FILE" --output_file "$VIDEO_CAPTION_FILE" \
+#     --provider "$PROVIDER"
 
 # Step 3.2: Preprocess video captions
 python step3_2_preprocess_video_caption.py --file_path "$VIDEO_CAPTION_FILE" \

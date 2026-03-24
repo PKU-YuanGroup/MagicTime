@@ -2,10 +2,11 @@ import os
 import json
 import argparse
 from tqdm import tqdm
-from openai import OpenAI
 from threading import Lock
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tenacity import retry, wait_exponential, stop_after_attempt
+
+from llm_provider import add_provider_args, create_client, get_model_name
 
 
 txt_prompt = '''
@@ -61,8 +62,7 @@ def load_existing_results(file_path):
             return empty_data
 
 @retry(wait=wait_exponential(multiplier=1, min=2, max=10), stop=stop_after_attempt(100))
-def call_gpt(prompt, model_name="gpt-4-vision-preview", api_key=None):
-    client = OpenAI(api_key=api_key)
+def call_gpt(prompt, client, model_name="gpt-4-vision-preview"):
     chat_completion = client.chat.completions.create(
         model=model_name,
         messages=[
@@ -75,9 +75,9 @@ def call_gpt(prompt, model_name="gpt-4-vision-preview", api_key=None):
     )
     return chat_completion.choices[0].message.content
 
-def save_output(video_id, prompt, output_file, api_key):
+def save_output(video_id, prompt, output_file, client, model_name):
     if not has_been_processed(video_id, output_file):
-        result = call_gpt(prompt, api_key=api_key)
+        result = call_gpt(prompt, client, model_name=model_name)
         with file_lock:
             with open(output_file, 'r+') as f:
                 # Read the current data and update it
@@ -88,7 +88,7 @@ def save_output(video_id, prompt, output_file, api_key):
                 f.truncate()  # Truncate file to new size
         print(f"Processed and saved output for Video ID {video_id}")
 
-def main(num_workers, all_prompts, output_file, api_key):
+def main(num_workers, all_prompts, output_file, client, model_name):
     # Load existing results
     existing_results = load_existing_results(output_file)
 
@@ -104,7 +104,7 @@ def main(num_workers, all_prompts, output_file, api_key):
 
     with ThreadPoolExecutor(max_workers=num_workers) as executor:
         future_to_index = {
-            executor.submit(save_output, video_id, prompt, output_file, api_key): video_id 
+            executor.submit(save_output, video_id, prompt, output_file, client, model_name): video_id
             for video_id, prompt in unprocessed_prompts.items()
         }
 
@@ -120,13 +120,19 @@ def main(num_workers, all_prompts, output_file, api_key):
 if __name__ == "__main__":
     # Set up argument parser
     parser = argparse.ArgumentParser(description="Generate video captions using GPT4V.")
-    parser.add_argument("--api_key", type=int, default=None, help="OpenAI API key.")
+    parser.add_argument("--api_key", type=str, default=None, help="API key (or set OPENAI_API_KEY / MINIMAX_API_KEY env var).")
     parser.add_argument("--num_workers", type=int, default=8, help="Number of worker threads for processing.")
     parser.add_argument("--input_file", type=str, default="2_2_final_useful_gpt_frames_caption.json", help="Path to the input JSON file.")
     parser.add_argument("--output_file", type=str, default="./3_1_gpt_video_caption.json", help="Path to save the generated video captions.")
+    add_provider_args(parser)
 
     # Parse command-line arguments
     args = parser.parse_args()
+
+    # Create LLM client and get model name
+    client = create_client(args)
+    model_name = get_model_name(args)
+    print(f"Using provider: {args.provider}, model: {model_name}")
 
     # Load data from the input file
     with open(args.input_file, 'r') as file:
@@ -136,4 +142,4 @@ if __name__ == "__main__":
     prompts = create_prompts(txt_prompt, data)
 
     # Execute main processing function
-    main(args.num_workers, prompts, args.output_file, args.api_key)
+    main(args.num_workers, prompts, args.output_file, client, model_name)

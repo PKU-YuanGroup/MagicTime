@@ -378,7 +378,55 @@ We found some plugins created by community developers. Thanks for their efforts:
   - Replicate Demo & Cloud API. [Replicate-MagicTime](https://replicate.com/camenduru/magictime) (by [@camenduru](https://twitter.com/camenduru)).
   - Jupyter Notebook. [Jupyter-MagicTime](https://github.com/camenduru/MagicTime-jupyter) (by [@ModelsLab](https://modelslab.com/)).
 
-If you find related work, please let us know. 
+If you find related work, please let us know.
+
+## 🤖 LLM Provider for Data Preprocessing
+
+The data preprocessing scripts (`data_preprocess/`) support multiple LLM providers for video/frame captioning. By default, **OpenAI GPT-4V** is used, but you can switch to **[MiniMax](https://www.minimaxi.com/)** or any OpenAI-compatible API.
+
+### Using MiniMax
+
+[MiniMax](https://www.minimaxi.com/) provides powerful LLM models (MiniMax-M2.7, MiniMax-M2.5) with an OpenAI-compatible API, supporting both text and vision inputs.
+
+```bash
+# Set your MiniMax API key
+export MINIMAX_API_KEY="your-api-key"
+
+# Frame captioning with MiniMax
+python data_preprocess/step2_1_GPT4V_frame_caption.py \
+    --provider minimax \
+    --image_directories ./step_1 \
+    --output_file ./2_1_gpt_frames_caption.json
+
+# Video captioning (concise) with MiniMax
+python data_preprocess/step3_1_GPT4V_video_caption_concise.py \
+    --provider minimax \
+    --input_file ./2_2_final_useful_gpt_frames_caption.json \
+    --output_file ./3_1_gpt_video_caption.json
+
+# Or edit data_preprocess/run.sh and set PROVIDER="minimax"
+```
+
+### Using a Custom Provider
+
+You can also use any OpenAI-compatible API by specifying `--base_url` and `--model`:
+
+```bash
+python data_preprocess/step2_1_GPT4V_frame_caption.py \
+    --base_url https://your-api.example.com/v1 \
+    --model your-model-name \
+    --api_key your-api-key \
+    --image_directories ./step_1
+```
+
+### Available Provider Arguments
+
+| Argument | Default | Description |
+|----------|---------|-------------|
+| `--provider` | `openai` | LLM provider (`openai` or `minimax`) |
+| `--base_url` | Provider default | Custom API base URL |
+| `--model` | Provider default | Model name |
+| `--api_key` | From env var | API key (or set `OPENAI_API_KEY` / `MINIMAX_API_KEY`) |
 
 ## 🐳 ChronoMagic Dataset
 ChronoMagic with 2265 metamorphic time-lapse videos, each accompanied by a detailed caption. We released the subset of ChronoMagic used to train MagicTime. The dataset can be downloaded at [HuggingFace Dataset](https://huggingface.co/datasets/BestWishYsh/ChronoMagic), or you can download it with the following command. Some samples can be found on our [Project Page](https://pku-yuangroup.github.io/MagicTime/).
